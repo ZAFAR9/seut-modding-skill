@@ -1,31 +1,47 @@
 # SEUT / Space Engineers Modding
 
 Assist with Space Engineers modding: **SEUT** (the Blender addon), **SBC/XML**
-definitions, **materials/textures**, and mod project structure. Use this
-whenever Dp Peter is working on Space Engineers models, blocks, materials,
-`.sbc` files, `.mwm` exports, or SEUT itself.
+definitions, **materials & voxel textures**, **modeling**, **conveyors &
+interactions**, and **scripting**. Use this whenever Dp Peter is working on SE
+models, blocks, materials, `.sbc`/XML, `.mwm` exports, mod scripts, or SEUT itself.
 
-## What this skill knows (knowledge base)
+The knowledge base is split into two categories, mirroring the GitHub repo:
 
-Read the relevant file(s) before answering detailed questions:
+## 📘 how-to/ — step-by-step walkthroughs
 
-- `knowledge/sbc-xml-basics.md` — how `.sbc` files work: lowercase rule, XML
-  format, copy-from-game workflow, override/additive/merged behavior, wrapper
-  structure, TypeId vs xsi:type, how definitions link, non-moddable defs.
-- `knowledge/cubeblocks-reference.md` — CubeBlock definition fields + the full
-  TypeId ↔ xsi:type block table + a minimal working block example.
-- `knowledge/materials-reference.md` — the Materials reference: CM/NG/ADD/
-  Alphamask RGBA channel packing, texconv commands, techniques, facing, wind,
-  and TransparentMaterials.
-- `knowledge/seut-reference.md` — SEUT install/requirements, collection
-  structure (Main/LOD/BS/Collision/Mountpoints), Main Panel + Shader Editor,
-  material workflow, export pipeline, collision rules, error codes.
-- `knowledge/mod-structure.md` — mod folder layout + `modinfo.sbmi` publishing
-  metadata.
+Task-oriented guides for *doing* things:
 
-## Tooling
+- `how-to/setup-seut.md` — install SEUT, configure paths, scaffold a mod, test loop.
+- `how-to/create-custom-block.md` — model → definition → validate → test, end to end.
+- `how-to/create-custom-material.md` — the 4 packed maps, techniques, glass mats.
+- `how-to/fix-voxel-textures.md` — the magenta/flat/black symptom→cause→fix map.
+- `how-to/work-with-dds-textures.md` — open/inspect/combine DDS in GIMP, what AO is.
+- `how-to/edit-workshop-mods.md` — copy Workshop mod → local → offline test → edit.
 
-`scripts/sbc_tool.py` (Python 3, stdlib only) — read/write/validate helper:
+## 📗 reference/ — saved knowledge, commands, data, advanced
+
+Encyclopedic reference to *look things up*:
+
+- `reference/sbc-xml-basics.md` — how `.sbc` works: lowercase rule, XML, override
+  behavior, wrapper structure, TypeId vs xsi:type, linking, non-moddable defs.
+- `reference/cubeblocks-reference.md` — CubeBlock fields + full TypeId↔xsi:type
+  table + minimal working block.
+- `reference/materials-reference.md` — CM/NG/ADD/Alphamask channel packing,
+  texconv commands, techniques, facing, wind, TransparentMaterials.
+- `reference/modeling-reference.md` — SEUT collections (Main/LOD/BS/Collision/
+  Mountpoints), grid sizing, subparts, collision rules, export, pitfalls.
+- `reference/conveyors-and-interactions.md` — `detector_conveyor*` dummies, small
+  vs large ports, in/out, interaction dummies, subparts, worked example.
+- `reference/xml-and-scripting.md` — coding SBC XML properly + editing vanilla XML;
+  PB scripts vs mod game-logic scripts, component skeletons, whitelist pitfalls.
+- `reference/seut-reference.md` — SEUT install/requirements, panels, Shader Editor,
+  export pipeline, error codes.
+- `reference/mod-structure.md` — mod folder layout, Workshop file access,
+  publishing metadata (`modinfo.sbmi`).
+
+## 🛠 Tooling
+
+`scripts/sbc_tool.py` (Python 3, stdlib only):
 
 ```
 python3 scripts/sbc_tool.py validate <file.sbc|.xml>   # well-formed + SE checks
@@ -35,21 +51,19 @@ python3 scripts/sbc_tool.py new-transparent --subtype ID
 python3 scripts/sbc_tool.py new-material --name NAME [--tech DECAL_CUTOUT]
 ```
 
-- `validate` catches malformed XML, missing `<Id>`/`<SubtypeId>`, wrong root,
-  and unknown material techniques.
-- Generators emit properly-namespaced, valid skeletons to build from.
+## How to help (standing rules)
 
-## How to help
-
-- **Reading/tracking:** use `inspect` to enumerate a mod's definitions; use
-  `grep` across `Data/` for a SubtypeId or texture path.
-- **Writing:** generate a skeleton with `new-block` / `new-transparent` /
-  `new-material`, then edit, then `validate` before declaring done.
-- **Materials:** channel packing lives in `materials-reference.md` — always
-  confirm ADD-map channels against the official wiki mapping (R=AO, G=Emissive).
-- **Always** copy vanilla `.sbc` from the game folder rather than authoring
-  from scratch, and keep the `.sbc` extension lowercase.
+- **Always** use this skill to inspect/validate/generate SBC/XML (`sbc_tool.py`).
+- **Reading/tracking:** `inspect` to enumerate a mod's definitions; `grep` across
+  `Data/` for a SubtypeId or texture path.
+- **Writing:** generate a skeleton, edit, then `validate` before declaring done.
+- **Texture issues:** verify **2048×2048** + **BC7 DDS** first, then channel
+  packing; for voxels confirm the **ADD map red (AO) channel is white**.
+- **Blender path errors:** prefer **relinking existing `.dds`** over hunting for
+  missing source `.tif`.
+- **Always** copy vanilla `.sbc` from the game folder rather than authoring from
+  scratch, and keep the `.sbc` extension lowercase.
 
 ## Sources
-All content archived 2026-07-17 from spaceengineers.wiki.gg (Modding/Reference,
-SEUT pages) + verified deep research. See individual knowledge files for URLs.
+Archived from spaceengineers.wiki.gg (Modding/Reference, SEUT pages) + verified
+research, 2026-07-17 and 2026-07-20. See individual files for URLs.
