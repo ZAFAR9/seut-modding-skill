@@ -20,6 +20,7 @@ Pick the row that matches you. Click the link. That's it.
 | 🐛 **Fix magenta / black / flat textures** in Blender | [how-to/fix-voxel-textures](how-to/fix-voxel-textures.md) |
 | 🖼️ **Open or edit `.dds` texture files** (in GIMP) | [how-to/work-with-dds-textures](how-to/work-with-dds-textures.md) |
 | ✏️ **Edit a mod I downloaded from the Workshop** | [how-to/edit-workshop-mods](how-to/edit-workshop-mods.md) |
+| ❓ **Understand SEUT terms** (LODs, BS, collision, mount points, mirroring…) | [how-to/blender-seut-concepts](how-to/blender-seut-concepts.md) |
 | 📖 **Look up how something works** (fields, formats, rules) | [reference/](reference/) |
 | 📦 **Copy a complete working mod** to learn from | [examples/ExampleConveyorCargo](examples/ExampleConveyorCargo/) |
 | ⚙️ **Study real shipping mods** (weapons, frameworks) | [advanced/](advanced/) |
@@ -76,6 +77,7 @@ The jargon that trips everyone up at first:
 | [create-custom-material](how-to/create-custom-material.md) | The 4 packed maps, techniques, glass materials |
 | [fix-voxel-textures](how-to/fix-voxel-textures.md) | Magenta / flat / black symptom → cause → fix |
 | [work-with-dds-textures](how-to/work-with-dds-textures.md) | Open / inspect / combine DDS in GIMP, what AO is |
+| [blender-seut-concepts](how-to/blender-seut-concepts.md) | LODs, Build Stages, collision, mount points, bounding box, mirroring, icon render, import/export — explained |
 | [edit-workshop-mods](how-to/edit-workshop-mods.md) | Copy Workshop mod → local → offline test → edit |
 
 ## 📗 reference/ — encyclopedia (understand a thing)

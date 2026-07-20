@@ -26,6 +26,7 @@ Then use the rest as you hit specific needs.
 | [create-custom-material](create-custom-material.md) | You need a custom texture/material (the 4 packed maps, glass, etc.). |
 | [fix-voxel-textures](fix-voxel-textures.md) | Textures render **magenta, black, or flat** and you need the cause + fix. |
 | [work-with-dds-textures](work-with-dds-textures.md) | You need to open, inspect, or combine `.dds` files (in GIMP). |
+| [blender-seut-concepts](blender-seut-concepts.md) | You want to **understand LODs, Build Stages, collision, mount points, bounding box, mirroring, icon render, import & export**. |
 | [edit-workshop-mods](edit-workshop-mods.md) | You want to copy a Steam Workshop mod locally and edit it. |
 
 ---

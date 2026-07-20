@@ -17,6 +17,8 @@ Task-oriented guides for *doing* things:
 - `how-to/fix-voxel-textures.md` — the magenta/flat/black symptom→cause→fix map.
 - `how-to/work-with-dds-textures.md` — open/inspect/combine DDS in GIMP, what AO is.
 - `how-to/edit-workshop-mods.md` — copy Workshop mod → local → offline test → edit.
+- `how-to/blender-seut-concepts.md` — explains LODs, Build Stages (BS), collision,
+  mount points, icon render mode, bounding box, mirroring mode, + how to import/export.
 
 ## 📗 reference/ — saved knowledge, commands, data, advanced
 
