@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <CubeBlocks>
+    <Definition xsi:type="MyObjectBuilder_CargoContainerDefinition">
+      <Id>
+        <TypeId>CargoContainer</TypeId>
+        <SubtypeId>BlackHoleContainer</SubtypeId>
+      </Id>
+      <DisplayName>Black Hole Container</DisplayName>
+      <Description>A singularity in a box. Effectively infinite storage with no stack limits.</Description>
+      <Icon>Textures\GUI\Icons\BlackHoleContainer.dds</Icon>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+
+      <!-- SEUT exports this .mwm. Rename to match your SubtypeId if different. -->
+      <Model>Models\BlackHoleContainer.mwm</Model>
+
+      <Components>
+        <Component Subtype="SteelPlate" Count="40" />
+        <Component Subtype="Construction" Count="40" />
+        <Component Subtype="LargeTube" Count="8" />
+        <Component Subtype="Computer" Count="4" />
+        <Component Subtype="SteelPlate" Count="20" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+
+      <!-- Build-stage models (BS1..BS3) SEUT exports. Delete lines you don't have. -->
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound="0.33" File="Models\BlackHoleContainer_BS1.mwm" />
+        <Model BuildPercentUpperBound="0.66" File="Models\BlackHoleContainer_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models\BlackHoleContainer_BS3.mwm" />
+      </BuildProgressModels>
+
+      <!-- Freely-placeable cube: a mount point on every face. -->
+      <MountPoints>
+        <MountPoint Side="Top"    StartX="0" StartY="0" EndX="1" EndY="1" />
+        <MountPoint Side="Bottom" StartX="0" StartY="0" EndX="1" EndY="1" />
+        <MountPoint Side="Left"   StartX="0" StartY="0" EndX="1" EndY="1" />
+        <MountPoint Side="Right"  StartX="0" StartY="0" EndX="1" EndY="1" />
+        <MountPoint Side="Front"  StartX="0" StartY="0" EndX="1" EndY="1" />
+        <MountPoint Side="Back"   StartX="0" StartY="0" EndX="1" EndY="1" />
+      </MountPoints>
+
+      <BlockPairName>BlackHoleContainer</BlockPairName>
+      <MirroringY>Z</MirroringY>
+      <EdgeType>Light</EdgeType>
+
+      <BuildTimeSeconds>20</BuildTimeSeconds>
+      <PCU>1</PCU>
+
+      <!-- Huge base volume in the definition (m^3). The script forces this even
+           higher at runtime and lifts the stack cap; this is the fallback if the
+           script ever fails to attach. 1,000,000 L = 1000 m^3. -->
+      <InventorySize>
+        <X>1000</X>
+        <Y>1000</Y>
+        <Z>1000</Z>
+      </InventorySize>
+
+      <IsAirTight>false</IsAirTight>
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+    </Definition>
+  </CubeBlocks>
+</Definitions>

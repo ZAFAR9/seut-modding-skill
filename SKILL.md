@@ -50,6 +50,13 @@ Encyclopedic reference to *look things up*:
   (`.mwm`/`.dds`). The `.sbc`, material `.xml`, and `modinfo` are validated by
   `sbc_tool.py`. Copy it as a starting point for new blocks.
 
+- `examples/BlackHoleContainer/` — a single **infinite-storage** cargo block:
+  validated `CargoContainerDefinition` `.sbc` (mount points on all faces, huge
+  `<InventorySize>` fallback, BS1–3) + `BlackHoleContainerLogic.cs`, a
+  `MyGameLogicComponent` (exact-subtype bind) that `FixInventoryVolume(1e9)`, clears
+  the item constraint, and removes the count cap. The reference for the game-logic
+  half SEUT can't produce. Model `.mwm` not included — drop your SEUT export in.
+
 ## 🧠 advanced/ — real production mods (study & patterns)
 
 Learnings extracted from complete shipping mods. See `advanced/README.md`.

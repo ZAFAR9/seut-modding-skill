@@ -23,6 +23,7 @@ Pick the row that matches you. Click the link. That's it.
 | ❓ **Understand SEUT terms** (LODs, BS, collision, mount points, mirroring…) | [how-to/blender-seut-concepts](how-to/blender-seut-concepts.md) |
 | 📖 **Look up how something works** (fields, formats, rules) | [reference/](reference/) |
 | 📦 **Copy a complete working mod** to learn from | [examples/ExampleConveyorCargo](examples/ExampleConveyorCargo/) |
+| 🕳️ **Make an infinite-storage container** (with C# logic) | [examples/BlackHoleContainer](examples/BlackHoleContainer/) |
 | ⚙️ **Study real shipping mods** (weapons, frameworks) | [advanced/](advanced/) |
 | 🛠️ **Validate or generate `.sbc` files** from the command line | [Tooling](#-tooling-sbc_toolpy) |
 
@@ -38,7 +39,7 @@ Pick the row that matches you. Click the link. That's it.
 seut-modding/
 ├── how-to/      ← step-by-step walkthroughs. START HERE.  (do a thing)
 ├── reference/   ← look-it-up encyclopedia.               (understand a thing)
-├── examples/    ← a full, working mod to copy from.
+├── examples/    ← full, working mods to copy from (conveyor cargo + infinite storage).
 ├── advanced/    ← teardowns of real published mods + frameworks.
 └── scripts/     ← sbc_tool.py: validate / inspect / generate .sbc files.
 ```
@@ -93,12 +94,17 @@ The jargon that trips everyone up at first:
 | [seut-reference](reference/seut-reference.md) | SEUT install, panels, Shader Editor, export pipeline, error codes |
 | [mod-structure](reference/mod-structure.md) | Mod folder layout, Workshop file access, publishing metadata |
 
-## 📦 examples/ — a full working mod
+## 📦 examples/ — full working mods
 
 [**ExampleConveyorCargo**](examples/ExampleConveyorCargo/) — a complete, annotated
 reference mod you can copy: a large-grid cargo container with two conveyor ports
 (large + small), a custom material, a game-logic C# script bound by SubtypeId, and
 publishing metadata. The text definitions all pass `sbc_tool.py validate`.
+
+[**BlackHoleContainer**](examples/BlackHoleContainer/) — a single cargo block with
+**effectively-infinite storage and no stack limits**. The reference for the piece SEUT
+can't make: the **game-logic C# script** that lifts the inventory caps, paired with a
+validated `CargoContainerDefinition` `.sbc`. Drop your exported `.mwm` into `Models\`.
 
 ## ⚙️ advanced/ — real shipping mods, taken apart
 
