@@ -1,0 +1,10 @@
+# Binary assets excluded — study the source only
+*.mwm
+*.dds
+*.wav
+*.png
+*.jpg
+*.jpeg
+bin/
+obj/
+*.userprefs

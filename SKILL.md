@@ -84,6 +84,15 @@ Learnings extracted from complete shipping mods. See `advanced/README.md`.
   Programmable Block command framework (~80 commands + Custom Data routines,
   variables, hooks, intergrid). Reference only — the shipped script is obfuscated,
   so the code is not vendored; doc is built from the official Mother docs.
+- `advanced/whip-simpl.md` (+ `advanced/whip-simpl/SIMPL.cs`) — **Whip's SIMPL**
+  (WS 2344510837, Whiplash141): in-game PB script rendering a live ship-integrity map
+  on LCDs. Readable single file — the reference for robust Custom Data config parsing
+  (`MyIni` + `ConfigSection` base, one subclass per `[Section]`).
+- `advanced/elidanghud.md` (+ `advanced/elidanghud/`) — **EliDangHUD** (WS 3252520404):
+  Elite-Dangerous-style cockpit HUD mod. Text source only. The reference for drawing a
+  custom HUD from a mod: `MySessionComponentBase` draws billboards each tick using
+  cached `MyStringId`s that must match `<TransparentMaterial>`s in
+  `TransparentMaterials_ED.sbc`; `CustomCockpitLogic` adds cockpit terminal toggles.
 
 ## 🛠 Tooling
 

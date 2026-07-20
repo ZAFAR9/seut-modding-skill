@@ -25,6 +25,8 @@ only) so you can read the real thing.
 | 🎞️ **Animate** block parts (moving barrels, folding gear, emissives) | [Animation Engine](#-animation-engine) |
 | 📊 Understand the **block-info HUD** or hook into it from my mod | [BuildInfo](#-buildinfo) |
 | 🎛️ Control a **whole grid with text commands** (in-game, no mod) | [Mother OS](#-mother-os) |
+| 🩺 Show a **live ship-integrity / status map** on LCDs (in-game) | [Whip's SIMPL](#-whips-simpl) |
+| 🛸 Build a **custom cockpit HUD / on-screen overlay** from a mod | [EliDangHUD](#-elidanghud) |
 
 ---
 
@@ -50,7 +52,11 @@ advanced/
 ├── animation-engine.md           ← its write-up
 ├── buildinfo/                    ← BuildInfo source
 ├── buildinfo.md                  ← its write-up
-└── mother-os.md                  ← Mother OS write-up (no source — see note)
+├── mother-os.md                  ← Mother OS write-up (no source — see note)
+├── whip-simpl/                   ← Whip's SIMPL PB script (readable source)
+├── whip-simpl.md                 ← its write-up
+├── elidanghud/                   ← EliDangHUD HUD-mod source (text only)
+└── elidanghud.md                 ← its write-up
 ```
 
 **About the source folders:** only **text/source** files are kept (`.cs`, `.sbc`,
@@ -159,9 +165,41 @@ control too (`@Mothership door/open Hangar`).
 
 ---
 
+## 🩺 Whip's SIMPL
+
+**Workshop `2344510837` (Whiplash141).** An **in-game Programmable Block** script that
+renders a **live block-integrity map** of your ship onto LCDs — see what's damaged and
+where, across multiple screens/views. All config lives in the PB's Custom Data.
+
+- **Write-up:** [whip-simpl.md](whip-simpl.md)
+- **Source:** [whip-simpl/SIMPL.cs](whip-simpl/SIMPL.cs) — single readable ~3150-line
+  file. **The reason to read it:** the *gold-standard* Custom Data config pattern
+  (`MyIni` + a reusable `ConfigSection` base, one subclass per `[Section]`, templated
+  section names for repeatable groups) — copy this for any configurable script. Also a
+  clean example of block-iteration + LCD sprite drawing.
+
+---
+
+## 🛸 EliDangHUD
+
+**Workshop `3252520404`.** An *Elite Dangerous*-style **holographic cockpit HUD** mod:
+radar, targeting reticles, compass, velocity vectors, planet info, animated
+dust/visor. The reference for **drawing a custom HUD / world billboards from a mod**.
+
+- **Write-up:** [elidanghud.md](elidanghud.md)
+- **Source:** [elidanghud/](elidanghud/) — text only (67 `.dds`, 29 `.wav`, `bin/obj`
+  excluded). Read `CircleRenderer.cs` (the whole HUD, a per-tick
+  `MySessionComponentBase`), `CustomCockpitLogic.cs` (adds cockpit terminal toggles via
+  a `MyGameLogicComponent`), and `TransparentMaterials_ED.sbc` (**defines every HUD
+  material the code draws** — the binding between cached `MyStringId`s and the `.dds`
+  art). Key lesson: cache `MyStringId` material ids → define matching transparent
+  materials → draw billboards each frame.
+
+---
+
 ## 📜 Attribution
 
 The source in these folders belongs to its respective authors (ARYX/AWE, Mod Adjuster,
 Definition Extension API by Draygo, BuildInfo by Digi, Animation Engine by Math0424,
-Mother OS by Agentluke) under their own licenses, and is vendored here **for study
-only**. See the repo [LICENSE](../LICENSE).
+Mother OS by Agentluke, SIMPL by Whiplash141, EliDangHUD) under their own licenses,
+and is vendored here **for study only**. See the repo [LICENSE](../LICENSE).

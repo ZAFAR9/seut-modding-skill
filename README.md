@@ -110,6 +110,8 @@ Patterns pulled from complete published mods and frameworks. Full index in
 - **[BuildInfo](advanced/buildinfo.md)** — the in-game block-info HUD + its modder API.
 - **[Animation Engine](advanced/animation-engine.md)** — animate block parts with a `.bsl` script.
 - **[Mother OS](advanced/mother-os.md)** — an in-game command framework for whole grids.
+- **[Whip's SIMPL](advanced/whip-simpl.md)** — in-game ship-integrity map on LCDs (great Custom Data config example).
+- **[EliDangHUD](advanced/elidanghud.md)** — Elite-Dangerous-style cockpit HUD; how to draw billboards from a mod.
 
 ---
 
