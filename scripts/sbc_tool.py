@@ -86,8 +86,23 @@ def inspect(path):
         idn = t.find("Id")
         sid = idn.findtext("SubtypeId") if idn is not None else "?"
         print(f"[TM] TransparentMaterial / {sid}")
+        count += 1
+    # WeaponCore / vanilla-weapon style: <Weapon>, <Ammo>, <AmmoMagazine>,
+    # <Component>, <Blueprint>, <PhysicalItem> etc. use <Id><SubtypeId> too.
+    for tag in ("Weapon", "Ammo", "AmmoMagazine", "Component", "Blueprint",
+                "PhysicalItem", "MyObjectBuilder_Definition"):
+        for e in root.iter(tag):
+            if e.tag == "Definition":
+                continue
+            idn = e.find("Id")
+            if idn is None:
+                continue
+            tid = idn.findtext("TypeId") or "?"
+            sid = idn.findtext("SubtypeId") or "?"
+            print(f"[{tag}] {tid} / {sid}")
+            count += 1
     if count == 0:
-        print("No <Definition> elements found.")
+        print("No definitions found (no <Definition>/<Weapon>/<Ammo>/... with <Id>).")
     return 0
 
 

@@ -48,6 +48,24 @@ Encyclopedic reference to *look things up*:
   (`.mwm`/`.dds`). The `.sbc`, material `.xml`, and `modinfo` are validated by
   `sbc_tool.py`. Copy it as a starting point for new blocks.
 
+## 🧠 advanced/ — real production mods (study & patterns)
+
+Learnings extracted from complete shipping mods. See `advanced/README.md`.
+
+- `advanced/aryx-mod/` — the **ARYX / AWE** WeaponCore weapons pack (82 weapons):
+  vendored **text/definition files only** (`.cs`, `.sbc`), teardown in
+  `advanced/aryx-mod/OVERVIEW.md`. Binaries (1161 .mwm / 195 .dds / 214 .wav) not in repo.
+- `advanced/weaponcore-framework.md` — how WeaponCore (CoreParts) works: the
+  `partial class Parts` pattern, three-file-per-weapon convention
+  (`_Weapon`/`_AmmoTypes`/`_Animations`), `MasterConfig` registration, and how C#
+  defs bind to `.sbc` blocks (fixed weapons use `ConveyorSorter` base type).
+- `advanced/weaponcore-weapon-definition.md` — `WeaponDefinition` (Assignments/
+  Targeting/HardPoint), turret vs fixed, field cheat-sheet, snippets.
+- `advanced/weaponcore-ammo-and-armour.md` — `AmmoDef`, guided munitions,
+  multi-stage torpedoes, EWAR, custom armour, snippets.
+- `advanced/weaponcore-animations-effects.md` — AnimationDef/EventTriggers/RelMove,
+  emissives, particle events, subpart naming, TransparentMaterials.
+
 ## 🛠 Tooling
 
 `scripts/sbc_tool.py` (Python 3, stdlib only):

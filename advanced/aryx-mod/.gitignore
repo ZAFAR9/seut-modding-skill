@@ -1,0 +1,6 @@
+# Binary assets from the original ARYX CUSTOM.zip are intentionally NOT vendored.
+*.mwm
+*.dds
+*.wav
+*.png
+*.pdn

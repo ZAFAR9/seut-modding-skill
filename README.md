@@ -42,6 +42,20 @@ conveyor ports (large + small), a custom material, a game-logic C# script bound 
 SubtypeId, publishing metadata, and notes describing the binary assets to export.
 The text definitions are validated by `sbc_tool.py`.
 
+## 🧠 Advanced — real production mods (`advanced/`)
+
+Patterns extracted from complete shipping mods:
+
+- [`advanced/aryx-mod/`](advanced/aryx-mod/) — the **ARYX / AWE** WeaponCore weapons
+  pack (82 weapons). Text/definition files only; teardown in
+  [`OVERVIEW.md`](advanced/aryx-mod/OVERVIEW.md).
+- [`weaponcore-framework.md`](advanced/weaponcore-framework.md) — how WeaponCore /
+  CoreParts works end to end.
+- [`weaponcore-weapon-definition.md`](advanced/weaponcore-weapon-definition.md),
+  [`weaponcore-ammo-and-armour.md`](advanced/weaponcore-ammo-and-armour.md),
+  [`weaponcore-animations-effects.md`](advanced/weaponcore-animations-effects.md) —
+  deep dives with field cheat-sheets and reusable snippets.
+
 ## 🛠 Tooling
 
 `scripts/sbc_tool.py` — validate / inspect / generate SBC + material XML
