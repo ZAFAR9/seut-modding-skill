@@ -34,6 +34,14 @@ Encyclopedic reference to look things up:
 | [`seut-reference.md`](reference/seut-reference.md) | SEUT install, panels, Shader Editor, export pipeline, error codes |
 | [`mod-structure.md`](reference/mod-structure.md) | Mod folder layout, Workshop file access, publishing metadata |
 
+## 📦 Complete example mod (`examples/`)
+
+[`examples/ExampleConveyorCargo/`](examples/ExampleConveyorCargo/) — a full,
+annotated reference mod you can copy from: a large-grid cargo container with two
+conveyor ports (large + small), a custom material, a game-logic C# script bound by
+SubtypeId, publishing metadata, and notes describing the binary assets to export.
+The text definitions are validated by `sbc_tool.py`.
+
 ## 🛠 Tooling
 
 `scripts/sbc_tool.py` — validate / inspect / generate SBC + material XML

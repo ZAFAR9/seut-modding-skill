@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  modinfo.sbmi - publishing metadata written by SE's dev overlay when you upload
+  the mod to the Workshop. WorkshopId/Id are assigned on first publish; leave 0
+  for an unpublished local mod. See ../../reference/mod-structure.md.
+-->
+<MyObjectBuilder_ModInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SteamIDOwner>0</SteamIDOwner>
+  <WorkshopId>0</WorkshopId>
+  <WorkshopIds />
+  <Id>0</Id>
+  <Subtype>ExampleConveyorCargo</Subtype>
+</MyObjectBuilder_ModInfo>

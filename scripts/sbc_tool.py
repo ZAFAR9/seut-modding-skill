@@ -38,6 +38,8 @@ def validate(path):
     if root.tag not in ("Definitions", "MyObjectBuilder_ModInfo"):
         if root.tag == "Material":
             notes.append("Standalone <Material> block (model .xml fragment).")
+        elif root.tag == "Model":
+            notes.append("Model material .xml (<Model> root with <Material> entries).")
         else:
             issues.append(f"Root <{root.tag}> is not <Definitions>.")
     if path.lower().endswith(".sbc") and not path.split("/")[-1].endswith(".sbc"):

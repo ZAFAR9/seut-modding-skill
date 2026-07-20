@@ -39,6 +39,15 @@ Encyclopedic reference to *look things up*:
 - `reference/mod-structure.md` — mod folder layout, Workshop file access,
   publishing metadata (`modinfo.sbmi`).
 
+## 📦 examples/ — complete reference mod
+
+- `examples/ExampleConveyorCargo/` — a full annotated skeleton mod: a 1×1×1
+  large-grid cargo container with **two conveyor ports** (large + small via
+  `detector_conveyor*` dummies), a **custom material**, a **game-logic C# script**
+  bound by SubtypeId, `modinfo.sbmi`, and per-asset notes for the binary parts
+  (`.mwm`/`.dds`). The `.sbc`, material `.xml`, and `modinfo` are validated by
+  `sbc_tool.py`. Copy it as a starting point for new blocks.
+
 ## 🛠 Tooling
 
 `scripts/sbc_tool.py` (Python 3, stdlib only):
