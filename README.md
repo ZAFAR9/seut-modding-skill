@@ -56,6 +56,17 @@ Patterns extracted from complete shipping mods:
   [`weaponcore-animations-effects.md`](advanced/weaponcore-animations-effects.md) —
   deep dives with field cheat-sheets and reusable snippets.
 
+**Modding frameworks & tools:**
+
+- [`mod-adjuster-framework.md`](advanced/mod-adjuster-framework.md) — **Mod Adjuster
+  V2**: runtime definition patching via XML.
+- [`definition-extension-api.md`](advanced/definition-extension-api.md) —
+  **Definition Extension API**: typed custom attributes on definitions.
+- [`buildinfo.md`](advanced/buildinfo.md) — **BuildInfo** (Digi): in-game info
+  toolkit + modder PublicAPI.
+- [`animation-engine.md`](advanced/animation-engine.md) — **Animation Engine**
+  (Math0424): `.bsl` block-animation scripting.
+
 ## 🛠 Tooling
 
 `scripts/sbc_tool.py` — validate / inspect / generate SBC + material XML

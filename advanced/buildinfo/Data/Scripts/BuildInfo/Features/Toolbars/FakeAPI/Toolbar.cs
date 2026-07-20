@@ -1,0 +1,228 @@
+﻿using System;
+using Digi.BuildInfo.Features.Toolbars.FakeAPI.Items;
+using Digi.BuildInfo.Utilities;
+using Digi.Input;
+using Sandbox.Common.ObjectBuilders;
+using Sandbox.Game;
+using Sandbox.ModAPI;
+using VRage;
+using VRage.Game;
+using VRage.Game.Entity;
+using VRage.Utils;
+using VRageMath;
+
+namespace Digi.BuildInfo.Features.Toolbars.FakeAPI
+{
+    /// <summary>
+    /// A fake API for toolbars that would be easier to replace if Keen ever adds an actual API.
+    /// Not updated automatically, requires using <see cref="LoadFromOB(MyObjectBuilder_Toolbar)"/> with <see cref="ToolbarTracker.GetToolbarOBFromEntity(VRage.ModAPI.IMyEntity, ToolbarId, MyObjectBuilder_CubeBlock)"/>.
+    /// </summary>
+    public class Toolbar
+    {
+        public readonly MyEntity Owner;
+        public readonly int SlotsPerPage;
+        public readonly int PageCount;
+
+        public readonly ToolbarId Id;
+        public MyToolbarType Type { get; private set; } = MyToolbarType.None;
+        public int? SelectedSlot { get; private set; } = null;
+        public int CurrentPageIndex { get; private set; } = 0;
+
+        public bool HasItems { get; private set; }
+
+        /// <summary>
+        /// NOTE: It contains null for empty slots, and toolbar items can be invalid, be sure to check <see cref="ToolbarItem.IsValid"/>.
+        /// </summary>
+        public readonly ToolbarItem[] Items;
+        //public readonly List<ToolbarItem> ItemsGamepad;
+
+        public event Action<int> PageChanged;
+
+        readonly BuildInfoMod Main;
+
+        public Toolbar(MyEntity owner, ToolbarId id, MyToolbarType type, int slotsPerPage = 9, int pages = 9)
+        {
+            Main = BuildInfoMod.Instance;
+
+            Owner = owner;
+            Id = id;
+            Type = type;
+            SlotsPerPage = slotsPerPage;
+            PageCount = pages;
+
+            Items = new ToolbarItem[SlotsPerPage * PageCount];
+            //ItemsGamepad = new List<ToolbarItem>();
+        }
+
+        public void Dispose()
+        {
+        }
+
+        public void LoadFromOB(MyObjectBuilder_Toolbar ob)
+        {
+            if(ob == null) throw new ArgumentNullException("ob");
+
+            Utils.AssertMainThread(throwException: true);
+
+            Type = ob.ToolbarType;
+
+            Clear();
+            SelectedSlot = ob.SelectedSlot;
+
+            if(ob.Slots != null)
+            {
+                foreach(MyObjectBuilder_Toolbar.Slot slot in ob.Slots)
+                {
+                    SetItemAtSerialized(slot.Index, slot.Item, slot.Data);
+                }
+            }
+
+            // TODO: gamepad
+            //if(ob.SlotsGamepad != null)
+            //{
+            //    foreach(MyObjectBuilder_Toolbar.Slot item in ob.SlotsGamepad)
+            //    {
+            //        SetItemAtSerialized(item.Index, item.Item, item.Data, gamepad: true);
+            //    }
+            //}
+        }
+
+        /// <summary>
+        /// Returns true if page changed
+        /// </summary>
+        public bool CheckPageInputs()
+        {
+            // only care about toolbars with more than one page
+            if(PageCount <= 1)
+                return false;
+
+            // NOTE: only designed with in-GUI toolbar in mind
+            if(!MyAPIGateway.Gui.IsCursorVisible)
+                return false;
+
+            // most stuff like ones from MyToolbarComponent.HandleInput(), might need re-checking
+
+            bool changes = false;
+
+            MyStringId[] controlSlots = Main.Constants.ToolbarSlotControlIds;
+            MyStringId[] controlPages = Main.Constants.ToolbarPageControlIds;
+
+            // 10 total, 1-9 and 0 last
+            for(int i = 0; i < controlSlots.Length; ++i)
+            {
+                if(InputWrapper.IsControlJustPressed(controlPages[i]))
+                {
+                    SetToolbarPage(i);
+                    changes = true;
+                }
+
+                //if(i < 9 && InputWrapper.IsControlJustPressed(controlSlots[i]))
+                //{
+                //    // slot activated depending on GUI type
+                //}
+            }
+
+            // HACK next/prev toolbar hotkeys don't work in the menu unless you click on the icons list... but I'm forcing toolbar to cycle regardless.
+            // spectator condition is in game code because toolbar up/down is used for going between players.
+            // also MUST be after the slot checks to match the vanilla code's behavior.
+            //if(!inToolbarConfig && MySpectator.Static.SpectatorCameraMovement != MySpectatorCameraMovementEnum.ConstantDelta)
+            if(!Main.GUIMonitor.InAnyDialogBox && MySpectator.Static.SpectatorCameraMovement != MySpectatorCameraMovementEnum.ConstantDelta)
+            {
+                if(InputWrapper.IsControlJustPressed(ControlIds.TOOLBAR_UP))
+                {
+                    AdjustToolbarPage(1);
+                    changes = true;
+                }
+                // no 'else' because that's how the game handles it, meaning pressing both controls in same tick would do both actions.
+                if(InputWrapper.IsControlJustPressed(ControlIds.TOOLBAR_DOWN))
+                {
+                    AdjustToolbarPage(-1);
+                    changes = true;
+                }
+            }
+
+            return changes;
+        }
+
+        void SetToolbarPage(int pageIndex)
+        {
+            pageIndex = MathHelper.Clamp(pageIndex, 0, PageCount - 1);
+
+            if(CurrentPageIndex != pageIndex)
+            {
+                CurrentPageIndex = pageIndex;
+                PageChanged?.Invoke(pageIndex);
+            }
+        }
+
+        void AdjustToolbarPage(int relativeChange)
+        {
+            CurrentPageIndex += (relativeChange > 0 ? 1 : -1);
+
+            // loop-around
+            if(CurrentPageIndex >= PageCount)
+                CurrentPageIndex = 0;
+            else if(CurrentPageIndex < 0)
+                CurrentPageIndex = PageCount - 1;
+
+            PageChanged?.Invoke(CurrentPageIndex);
+
+            // FIXME: temporarily disabled until I can figure out the issues
+            // HACK: ensure the toolbar page is what the code expects, avoids toolbar page desync
+            // HACK: needs to be delayed otherwise it jumps more than one page
+            //int copyPage = CurrentPageIndex;
+            //MyAPIGateway.Utilities.InvokeOnGameThread(() =>
+            //{
+            //    MyVisualScriptLogicProvider.SetToolbarPageLocal(copyPage);
+            //});
+        }
+
+        void Clear()
+        {
+            HasItems = false;
+
+            //ItemsGamepad.Clear();
+
+            for(int i = 0; i < Items.Length; i++)
+            {
+                Items[i] = null;
+            }
+        }
+
+        void SetItemAtSerialized(int i, string serializedItem, MyObjectBuilder_ToolbarItem data, bool gamepad = false)
+        {
+            IToolbarItem item = CreateToolbarItem(data);
+            if(!item.Validate(data))
+                return;
+
+            if(gamepad)
+            {
+                // TODO: gamepad
+
+                //HasItems = true;
+            }
+            else
+            {
+                if(i >= Items.Length)
+                    return;
+
+                Items[i] = (ToolbarItem)item;
+                HasItems = true;
+            }
+        }
+
+        IToolbarItem CreateToolbarItem(MyObjectBuilder_ToolbarItem data)
+        {
+            if(data is MyObjectBuilder_ToolbarItemTerminalBlock)
+                return new ToolbarItemTerminalBlock();
+
+            if(data is MyObjectBuilder_ToolbarItemTerminalGroup)
+                return new ToolbarItemTerminalGroup();
+
+            if(data is MyObjectBuilder_ToolbarItemDefinition)
+                return new ToolbarItemWithDefinition();
+
+            return new ToolbarItemUnknown();
+        }
+    }
+}

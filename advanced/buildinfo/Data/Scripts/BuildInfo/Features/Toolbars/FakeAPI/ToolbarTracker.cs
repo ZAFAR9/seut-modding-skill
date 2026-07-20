@@ -1,0 +1,472 @@
+﻿using System;
+using System.Collections.Generic;
+using Digi.BuildInfo.VanillaData;
+using Sandbox.Common.ObjectBuilders;
+using Sandbox.Definitions;
+using Sandbox.Game.Entities;
+using Sandbox.Game.EntityComponents;
+using Sandbox.ModAPI;
+using SpaceEngineers.Game.ModAPI;
+using VRage.Game;
+using VRage.Game.Entity;
+using VRage.Game.ModAPI;
+using VRage.ModAPI;
+
+namespace Digi.BuildInfo.Features.Toolbars.FakeAPI
+{
+    public enum ToolbarId : byte
+    {
+        None,
+        Hotbar,
+        Waypoint,
+        LockedOn,
+        // TODO: build mode toolbar when relevant/needed
+        //BuildMode,
+    }
+
+    public struct ToolbarHolder
+    {
+        public Toolbar[] Toolbars;
+
+        public void Dispose()
+        {
+            if(Toolbars == null) throw new Exception("null Toolbars!");
+
+            foreach(var tb in Toolbars)
+            {
+                tb.Dispose();
+            }
+        }
+    }
+
+    public class ToolbarTracker : ModComponent
+    {
+        // other toolbars not accounted for:
+        //  MyToolbarComponent has universal character toolbar and points to "current toolbar" (points to Sandbox.Game.Entities.IMyControllableEntity.Toolbar)
+        //  MyToolBarCollection has other characters' toolbars
+        //  MyControllableSphere has a toolbar for reasons
+
+        public readonly Dictionary<IMyEntity, ToolbarHolder> EntitiesWithToolbars = new Dictionary<IMyEntity, ToolbarHolder>();
+
+        public ToolbarTracker(BuildInfoMod main) : base(main)
+        {
+            Main.BlockMonitor.BlockAdded += BlockAdded;
+        }
+
+        public override void RegisterComponent()
+        {
+        }
+
+        public override void UnregisterComponent()
+        {
+            Main.BlockMonitor.BlockAdded -= BlockAdded;
+
+            if(!Main.ComponentsRegistered)
+                return;
+        }
+
+        void BlockAdded(IMySlimBlock slim)
+        {
+            IMyCubeBlock block = slim.FatBlock;
+
+            if(block == null)
+                return;
+
+            if(EntitiesWithToolbars.ContainsKey(block))
+                return;
+
+            // it's created but not actually used
+            //{
+            //    var casted = block as IMyLargeTurretBase;
+            //    if(casted != null)
+            //    {
+            //        SingleToolbar(block, MyToolbarType.LargeCockpit);
+            //        return;
+            //    }
+            //}
+            {
+                var casted = block as IMyTurretControlBlock;
+                if(casted != null)
+                {
+                    // MyTurretControlBlock.Init()
+                    SingleToolbar(block, MyToolbarType.ButtonPanel, 2, 10);
+                    return;
+                }
+            }
+            {
+                var casted = block as MyShipController;
+                if(casted != null)
+                {
+                    var owner = (MyEntity)block;
+
+                    bool isRC = casted is IMyRemoteControl;
+
+                    var th = new ToolbarHolder();
+                    th.Toolbars = new Toolbar[isRC ? 3 : 2];
+
+                    // MyShipController.Init()
+                    th.Toolbars[0] = new Toolbar(owner, ToolbarId.Hotbar, casted.ToolbarType);
+                    th.Toolbars[1] = new Toolbar(owner, ToolbarId.LockedOn, MyToolbarType.ButtonPanel, 2, 10);
+                    // new Toolbar(owner, ToolbarId.BuildMode, MyToolbarType.BuildCockpit);
+
+                    if(isRC)
+                    {
+                        // MyRemoteControl.Init()
+                        th.Toolbars[2] = new Toolbar(owner, ToolbarId.Waypoint, MyToolbarType.ButtonPanel, 9, 10);
+                    }
+
+                    EntitiesWithToolbars[owner] = th;
+
+                    block.OnClosing += BlockClosing;
+                    return;
+                }
+            }
+            {
+                var casted = block as IMySensorBlock;
+                if(casted != null)
+                {
+                    // MySensorBlock.Init()
+                    SingleToolbar(block, MyToolbarType.ButtonPanel, 2, 10);
+                    return;
+                }
+            }
+            {
+                var casted = block as IMyTimerBlock;
+                if(casted != null)
+                {
+                    // MyTimerBlock.Init()
+                    SingleToolbar(block, MyToolbarType.ButtonPanel, 9, 10);
+                    return;
+                }
+            }
+            {
+                var casted = block as IMyAirVent;
+                if(casted != null)
+                {
+                    // MyTimerBlock.Init()
+                    SingleToolbar(block, MyToolbarType.ButtonPanel, 2, 10);
+                    return;
+                }
+            }
+            {
+                var casted = block as IMyButtonPanel;
+                if(casted != null)
+                {
+                    // MyButtonPanel.Init()
+                    var def = (MyButtonPanelDefinition)slim.BlockDefinition;
+                    SingleToolbar(block, MyToolbarType.ButtonPanel, Math.Min(def.ButtonCount, 9), def.ButtonCount / 9 + 1);
+                    return;
+                }
+            }
+            {
+                var casted = block as IMyEventControllerBlock;
+                if(casted != null)
+                {
+                    // MyEventControllerBlock.Init()
+                    SingleToolbar(block, MyToolbarType.ButtonPanel, 2, 10);
+                    return;
+                }
+            }
+            {
+                var casted = block as IMyTargetDummyBlock;
+                if(casted != null)
+                {
+                    // MyTargetDummyBlock.Init()
+                    SingleToolbar(block, MyToolbarType.ButtonPanel, 2, 10);
+                    return;
+                }
+            }
+            {
+                var casted = block as IMyDefensiveCombatBlock;
+                if(casted != null)
+                {
+                    // MyDefensiveCombatBlock.ChangeActions() - overwrites all other
+                    SingleToolbar(block, MyToolbarType.ButtonPanel, 2, 10);
+                    return;
+                }
+            }
+            {
+                MyPathRecorderComponent comp;
+                if(block.Components.TryGet(out comp))
+                {
+                    // MyPathRecorderComponent.SetupAction() is the real one, not the one from ctor()
+                    SingleToolbar(block, MyToolbarType.ButtonPanel, 9, 10);
+                    return;
+                }
+            }
+            {
+                IMyBasicMissionAutopilot comp;
+                if(block.Components.TryGet(out comp))
+                {
+                    // from MyBasicMissionAutopilot.CreateTerminalControls() - overwrites all other
+                    SingleToolbar(block, MyToolbarType.Ship, 1, 1);
+                    return;
+                }
+            }
+            {
+                IMySignalReceiverEntityComponent comp;
+                if(block.Components.TryGet(out comp))
+                {
+                    // MySignalReceiverEntityComponent.OnAddedToContainer()
+                    SingleToolbar(block, MyToolbarType.ButtonPanel, 9, 10);
+                    return;
+                }
+            }
+            {
+                // not saved to OB therefore can't retrieve it; likely a dummy for the interface
+                //var casted = block as IMyFlightMovementBlock;
+                //if(casted != null)
+                //{
+                //    // MyFlightMovementBlock.Init()
+                //    SingleToolbar(block, MyToolbarType.ButtonPanel, 1, 1);
+                //    return;
+                //}
+            }
+        }
+
+        void SingleToolbar(IMyCubeBlock block, MyToolbarType toolbarType, int slotsPerPage = 9, int pages = 9, ToolbarId id = ToolbarId.None)
+        {
+            var toolbar = new Toolbar((MyEntity)block, id, toolbarType, slotsPerPage, pages);
+
+            EntitiesWithToolbars[block] = new ToolbarHolder()
+            {
+                Toolbars = new Toolbar[] { toolbar },
+            };
+
+            block.OnClosing += BlockClosing;
+        }
+
+        void BlockClosing(IMyEntity ent)
+        {
+            try
+            {
+                ToolbarHolder th;
+                if(EntitiesWithToolbars.TryGetValue(ent, out th))
+                {
+                    EntitiesWithToolbars.Remove(ent);
+                    th.Dispose();
+                }
+            }
+            catch(Exception e)
+            {
+                Log.Error(e);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ent"></param>
+        /// <param name="toolbarId"></param>
+        /// <param name="blockOB">only provide it if you have it from something else as an optimization, otherwise leave null</param>
+        /// <returns></returns>
+        public static MyObjectBuilder_Toolbar GetToolbarOBFromEntity(IMyEntity ent, ToolbarId toolbarId = ToolbarId.Hotbar, MyObjectBuilder_CubeBlock blockOB = null)
+        {
+            var block = ent as IMyCubeBlock;
+            if(block != null)
+            {
+                if(toolbarId == ToolbarId.Waypoint && ent is IMyRemoteControl)
+                {
+                    var ap = ent.Components.Get<MyAutopilotComponent>();
+                    if(ap != null)
+                    {
+                        List<MyAutopilotWaypoint> selected = ap.SelectedWaypoints;
+                        if(selected != null && selected.Count > 0)
+                        {
+                            MyObjectBuilder_AutopilotWaypoint selectedOB = selected[0].GetObjectBuilder();
+
+                            var ob = new MyObjectBuilder_Toolbar()
+                            {
+                                ToolbarType = MyToolbarType.ButtonPanel,
+                                Slots = new List<MyObjectBuilder_Toolbar.Slot>(selectedOB.Actions?.Count ?? 0),
+                            };
+
+                            if(selectedOB.Actions != null)
+                            {
+                                for(int i = 0; i < selectedOB.Actions.Count; i++)
+                                {
+                                    var itemOB = new MyObjectBuilder_Toolbar.Slot()
+                                    {
+                                        Index = selectedOB.Indexes[i],
+                                        Data = selectedOB.Actions[i],
+                                        Item = string.Empty,
+                                    };
+
+                                    ob.Slots.Add(itemOB);
+                                }
+                            }
+
+                            return ob;
+                        }
+                    }
+
+                    return null;
+                }
+
+                if(ent is IMyPathRecorderBlock)
+                {
+                    var prc = ent.Components.Get<MyPathRecorderComponent>();
+                    List<MyAutopilotWaypoint> waypoints = prc?.Waypoints;
+                    if(waypoints != null && waypoints.Count > 0)
+                    {
+                        var ob = new MyObjectBuilder_Toolbar()
+                        {
+                            ToolbarType = MyToolbarType.ButtonPanel,
+                            Slots = new List<MyObjectBuilder_Toolbar.Slot>(0),
+                        };
+
+                        foreach(MyAutopilotWaypoint wp in waypoints)
+                        {
+                            if(wp.SelectedForDraw)
+                            {
+                                var wpOB = wp.GetObjectBuilder();
+
+                                if(wpOB.Actions != null)
+                                {
+                                    for(int i = 0; i < wpOB.Actions.Count; i++)
+                                    {
+                                        var itemOB = new MyObjectBuilder_Toolbar.Slot()
+                                        {
+                                            Index = wpOB.Indexes[i],
+                                            Data = wpOB.Actions[i],
+                                            Item = string.Empty,
+                                        };
+
+                                        ob.Slots.Add(itemOB);
+                                    }
+                                }
+
+                                break; // HACK: same behavior MyPathRecorderComponent.SelectedWaypointsChanged(), first in order gets the toolbar
+                            }
+                        }
+
+                        return ob;
+                    }
+
+                    return null;
+                }
+
+                if(blockOB == null)
+                    blockOB = block.GetObjectBuilderCubeBlock(false);
+
+                {
+                    // transponder and anything else that uses this component
+                    IMySignalReceiverEntityComponent comp;
+                    if(ent.Components.TryGet(out comp))
+                    {
+                        if(blockOB?.ComponentContainer?.Components != null)
+                        {
+                            foreach(var cd in blockOB.ComponentContainer.Components)
+                            {
+                                var signalReceiverOB = cd.Component as MyObjectBuilder_SignalReceiverEntityComponent;
+                                if(signalReceiverOB != null)
+                                    return signalReceiverOB.Toolbar;
+                            }
+                        }
+
+                        //Log.Error($"couldn't find serialized SignalReceiverEntityComponent in block: {block.GetType().Name} (entId={block.EntityId})");
+                        return null;
+                    }
+                }
+
+                {
+                    var casted = blockOB as MyObjectBuilder_AirVent;
+                    if(casted != null)
+                        return casted.Toolbar;
+                }
+                {
+                    var casted = blockOB as MyObjectBuilder_TimerBlock;
+                    if(casted != null)
+                        return casted.Toolbar;
+                }
+                {
+                    var casted = blockOB as MyObjectBuilder_SensorBlock;
+                    if(casted != null)
+                        return casted.Toolbar;
+                }
+                {
+                    var casted = blockOB as MyObjectBuilder_ButtonPanel;
+                    if(casted != null)
+                        return casted.Toolbar;
+                }
+                {
+                    var casted = blockOB as MyObjectBuilder_DefensiveCombatBlock;
+                    if(casted != null)
+                        return casted.Toolbar;
+                }
+                {
+                    var casted = blockOB as MyObjectBuilder_EventControllerBlock;
+                    if(casted != null)
+                        return casted.Toolbar;
+                }
+                {
+                    var casted = blockOB as MyObjectBuilder_TurretControlBlock;
+                    if(casted != null)
+                        return casted.Toolbar;
+                }
+                //{
+                //    var casted = blockOB as MyObjectBuilder_FlightMovementBlock;
+                //    if(casted != null)
+                //        return casted.Toolbar;
+                //}
+                {
+                    var casted = blockOB as MyObjectBuilder_ShipController;
+                    if(casted != null)
+                    {
+                        switch(toolbarId)
+                        {
+                            case ToolbarId.Hotbar: return casted.Toolbar;
+                            // case ToolbarId.BuildMode: return casted.BuildToolbar;
+                            case ToolbarId.LockedOn: return casted.OnLockedToolbar;
+                            default: Log.Error($"unknown toolbarId={toolbarId} for {block}"); return null;
+                        }
+                    }
+                }
+
+                // HACK: MyObjectBuilder_TargetDummyBlock is not whitelisted, hacky workarounds...
+                if(block.BlockDefinition.TypeId == Hardcoded.TargetDummyType)
+                {
+                    // yes I did first try MyAPIGateway.Utilities.SerializeFromBinary() with the same protobuf class from below, it just does not wanna work
+                    // also tried XML as seen below... /shrug.
+
+                    //xml = xml.Replace("MyObjectBuilder_TargetDummyBlock", "FakeOB_TargetDummyBlock");
+                    //var ob = MyAPIGateway.Utilities.SerializeFromXML<FakeOB_TargetDummyBlock>(xml);
+                    //return ob?.Toolbar;
+
+                    string xml = "";
+                    string trimmed = "";
+                    try
+                    {
+                        xml = MyAPIGateway.Utilities.SerializeToXML(blockOB);
+
+                        int start = xml.IndexOf("<Toolbar>") + "<Toolbar>".Length; // skip past it because we're replacing it
+                        int end = xml.IndexOf("</Toolbar>", start);
+                        trimmed = "<?xml version=\"1.0\" encoding=\"utf-16\"?>\n"
+                                          + "<MyObjectBuilder_Toolbar xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
+                                          + xml.Substring(start, end - start)
+                                          + "\n</MyObjectBuilder_Toolbar>";
+
+                        return MyAPIGateway.Utilities.SerializeFromXML<MyObjectBuilder_Toolbar>(trimmed);
+                    }
+                    catch(Exception e)
+                    {
+                        string msg = "Failed to workaround target dummy being prohibited";
+                        Log.Error($"{msg}\nXML=\n{xml}\n\ntrimmed=\n{trimmed}\nError: {e}", msg);
+                        return null;
+                    }
+                }
+            }
+
+            // TODO: other entities...?
+
+            return null;
+        }
+
+        //[ProtoContract]
+        //public class FakeOB_TargetDummyBlock // : MyObjectBuilder_FunctionalBlock
+        //{
+        //    [ProtoMember(13)]
+        //    public MyObjectBuilder_Toolbar Toolbar;
+        //}
+    }
+}

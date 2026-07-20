@@ -66,6 +66,21 @@ Learnings extracted from complete shipping mods. See `advanced/README.md`.
 - `advanced/weaponcore-animations-effects.md` — AnimationDef/EventTriggers/RelMove,
   emissives, particle events, subpart naming, TransparentMaterials.
 
+**Modding frameworks & tools** (vendored source, text files only):
+
+- `advanced/mod-adjuster-framework.md` (+ `advanced/mod-adjuster/`) — **Mod Adjuster
+  V2** (WS 3017795356): patch/override *existing* vanilla/other-mod definitions at
+  runtime via `Data/ModAdjuster/` XML, no full SBC copies.
+- `advanced/definition-extension-api.md` (+ `advanced/definition-extension-api/`) —
+  **Definition Extension API** (WS 2756894170, Draygo): attach typed custom
+  attributes (bool/decimal/string/color/vectors) to definitions and query them fast.
+- `advanced/buildinfo.md` (+ `advanced/buildinfo/`) — **BuildInfo** (Digi): in-game
+  block-info/overlay/ship-analysis toolkit; ComponentLib architecture; PublicAPI
+  (mod-message channel 514062285) to suppress its info on your blocks; `/bi` commands.
+- `advanced/animation-engine.md` (+ `advanced/animation-engine/`) — **Animation
+  Engine** (WS 2880317963, Math0424): animate block subparts/emissives/particles via
+  a custom `.bsl` script language bound by `@BlockId`.
+
 ## 🛠 Tooling
 
 `scripts/sbc_tool.py` (Python 3, stdlib only):
