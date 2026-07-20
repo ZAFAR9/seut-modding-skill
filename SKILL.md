@@ -80,6 +80,10 @@ Learnings extracted from complete shipping mods. See `advanced/README.md`.
 - `advanced/animation-engine.md` (+ `advanced/animation-engine/`) — **Animation
   Engine** (WS 2880317963, Math0424): animate block subparts/emissives/particles via
   a custom `.bsl` script language bound by `@BlockId`.
+- `advanced/mother-os.md` — **Mother OS** (WS 3411507973, Agentluke): in-game
+  Programmable Block command framework (~80 commands + Custom Data routines,
+  variables, hooks, intergrid). Reference only — the shipped script is obfuscated,
+  so the code is not vendored; doc is built from the official Mother docs.
 
 ## 🛠 Tooling
 

@@ -66,6 +66,8 @@ Patterns extracted from complete shipping mods:
   toolkit + modder PublicAPI.
 - [`animation-engine.md`](advanced/animation-engine.md) — **Animation Engine**
   (Math0424): `.bsl` block-animation scripting.
+- [`mother-os.md`](advanced/mother-os.md) — **Mother OS** (Agentluke): in-game PB
+  command framework (commands + Custom Data hooks/routines). Reference only.
 
 ## 🛠 Tooling
 
