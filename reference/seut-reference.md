@@ -37,6 +37,12 @@ Configure in SEUT Addon Preferences:
 
 Current downloads (as of archive): SEUT 1.2.1 (Blender 4.5.0); dev 1.2.2-alpha.2 (5.1+).
 
+> ⚠️ **Blender 5.x Icon Render bug:** on Blender 5.x, SEUT's **Icon Render** crashes
+> with `'Scene' object has no attribute 'node_tree'` (5.x removed `scene.node_tree`),
+> saving a **blank/transparent** icon. Use **Blender 4.2 LTS / 4.3** for icon
+> rendering, or make the icon manually — see
+> [how-to/blender-seut-concepts → Icon Render broken on Blender 5.x](../how-to/blender-seut-concepts.md#-icon-render-broken-on-blender-5x-manual-icon-workaround).
+
 ## Scene & collection structure
 
 SEUT uses Blender **collections** to recognize assets:

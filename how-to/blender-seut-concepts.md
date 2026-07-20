@@ -11,6 +11,7 @@ Jump to what you need:
 - [What is Collision?](#what-is-collision)
 - [What are Mount Points?](#what-are-mount-points)
 - [What is Icon Render Mode?](#what-is-icon-render-mode)
+- [⚠️ Icon Render broken on Blender 5.x? (manual icon workaround)](#-icon-render-broken-on-blender-5x-manual-icon-workaround)
 - [What is the Bounding Box?](#what-is-the-bounding-box)
 - [What is Mirroring Mode?](#what-is-mirroring-mode)
 - [How to properly import](#how-to-properly-import)
@@ -91,6 +92,78 @@ hand.
   icon you point `<Icon>` at in the definition.
 - **Tip:** render the icon *after* the model and materials look right, so the icon
   matches the final block.
+- ⚠️ **On Blender 5.x, SEUT's Icon Render is broken** (crashes with
+  `'Scene' object has no attribute 'node_tree'`) — see the
+  [workaround below](#-icon-render-broken-on-blender-5x-manual-icon-workaround).
+
+## ⚠️ Icon Render broken on Blender 5.x? (manual icon workaround)
+
+**Symptom:** SEUT's Icon Render toggle does nothing / produces an **empty (transparent)
+icon**, and the Blender **System Console** shows:
+
+```
+AttributeError: 'Scene' object has no attribute 'node_tree'
+  File "...\space-engineers-utilities\seut_icon_render.py", line 87, in setup_icon_render
+    tree = scene.node_tree
+SEUT Info: Icon successfully saved to '...\Icons\Scene.dds'. (I018)   ← but it's blank
+```
+
+**Cause:** SEUT's icon renderer builds a compositor rig via `scene.node_tree`. In
+**Blender 5.x that attribute was removed** (the compositor was reworked), so SEUT
+crashes *before* the rig is built and saves an empty frame. Normal `F12` render works
+because it never touches that code.
+
+**Real fix:** run SEUT on **Blender 4.x (4.2 LTS / 4.3)** — SEUT's supported version.
+You can keep 5.x installed alongside it and do SE work in the 4.x build.
+
+**Workaround (stay on Blender 5.x):** skip Icon Render and make the 128×128 icon by
+hand. Two ways — pick whichever you prefer.
+
+### A. Render the icon in Blender (works on any version)
+
+1. **Output Properties** → set **Resolution X = 128, Y = 128** (power-of-two;
+   256×256 also fine for crisper icons).
+2. **Render Properties** → enable **Film → Transparent** (icons need a see-through
+   background).
+3. Frame the block with your normal camera, then **F12** to render.
+4. In the render window: **Image → Save As** → **PNG** (keeps the alpha).
+
+### B1. Convert the PNG → DDS with `texconv` (command line)
+
+`texconv.exe` is a free Microsoft tool (from the **DirectXTex** GitHub releases). It
+doesn't "install" — it's a single `.exe` you drop somewhere (e.g. `C:\GAMMA\`). Open a
+terminal **in the folder with your PNG** (type `cmd` in Explorer's address bar), then:
+
+```
+texconv -f BC7_UNORM -m 0 -srgb -y -o Textures\GUI\Icons MyBlock.png
+```
+
+- `-f BC7_UNORM` → BC7, SE's icon/texture format
+- `-m 0` → full mipmap chain
+- `-srgb` → icons are colour data, treat as sRGB
+- `-y` → overwrite · `-o <dir>` → output folder
+
+If `texconv.exe` isn't on your PATH, call it by full path:
+`C:\GAMMA\texconv.exe -f BC7_UNORM -m 0 -srgb -y -o Textures\GUI\Icons MyBlock.png`
+
+### B2. Convert the PNG → DDS in GIMP (no download)
+
+Already have GIMP from texture work? Skip texconv entirely:
+
+1. Open the PNG in GIMP · **Image → Scale Image** → **128 × 128** if needed.
+2. **File → Export As** → filename ending in **`.dds`** (e.g. `MyBlock.dds`).
+3. In the DDS dialog: **Compression = BC7**, tick **Generate mipmaps** → Export.
+
+### Point the block at your icon
+
+In `CubeBlocks.sbc` (path relative to the mod root):
+
+```xml
+<Icon>Textures\GUI\Icons\MyBlock.dds</Icon>
+```
+
+> Same texture standard as everything else: **DDS / BC7 / mipmaps**, power-of-two
+> size. See [work-with-dds-textures](work-with-dds-textures.md).
 
 ## What is the Bounding Box?
 
