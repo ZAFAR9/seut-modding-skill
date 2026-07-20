@@ -19,6 +19,15 @@ Task-oriented guides for *doing* things:
 - `how-to/edit-workshop-mods.md` — copy Workshop mod → local → offline test → edit.
 - `how-to/blender-seut-concepts.md` — explains LODs, Build Stages (BS), collision,
   mount points, icon render mode, bounding box, mirroring mode, + how to import/export.
+- `how-to/install-and-publish-checklist.md` — load a mod locally (%AppData% Mods),
+  F11 test, OneDrive gotcha, and what a complete mod needs before publishing.
+- `how-to/troubleshooting/` — focused fix pages: `export-errors.md` (E016 unparented,
+  W012 DLC material, SEUT's duplicate auto-`.sbc`, reading a clean I007/I008 log) and
+  `size-and-placement.md` (block acts 1×1, off-origin clipping, `<Size>`↔bounding
+  box↔mesh-origin must agree, measuring a `.glb`).
+- `how-to/conveyors/` — `mount-points.md` (sizing, `0→N` cell math, SEUT visual tool)
+  and `conveyor-dummies.md` (`detector_conveyor_N` naming/orientation/parenting — the
+  "connector not recognized" checklist).
 
 ## 📗 reference/ — saved knowledge, commands, data, advanced
 

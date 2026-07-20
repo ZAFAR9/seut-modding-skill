@@ -78,6 +78,8 @@ neighbouring blocks.
 - **Tip:** for a 1×1×1 cargo container you'll typically want mount points on the faces
   you intend to place against — commonly all sides for a freely-placeable block.
 - Detail: [`../reference/cubeblocks-reference.md`](../reference/cubeblocks-reference.md).
+- **Task guide:** to size mount points, get them *perfect* with the SEUT visual tool, and
+  learn the `0→N` cell math, see [`conveyors/mount-points.md`](conveyors/mount-points.md).
 
 ## What is Icon Render Mode?
 
@@ -177,6 +179,9 @@ its `<Size>` in cubes × the cube size.
 - **How in SEUT:** SEUT can show the bounding box for your chosen size so you can check
   the fit. Set the block's size (and the matching `<Size>` in the `.sbc`) and keep
   geometry within it. Also set the **origin/pivot** correctly so the block seats right.
+- **If the block acts 1×1, floats, or clips through the map:** `<Size>`, the SEUT
+  bounding box, and the mesh origin must all agree, and the mesh must sit in the positive
+  octant. Full fix: [`troubleshooting/size-and-placement.md`](troubleshooting/size-and-placement.md).
 
 ## What is Mirroring Mode?
 
@@ -250,3 +255,16 @@ Turning your Blender scene into a usable in-game `.mwm`:
 | **BS1 / BS2 / BS3** | build-stage (under-construction) models | optional but nice |
 | **Collision** | low-poly convex physics shape | strongly recommended |
 | **Mountpoints** | where the block attaches to the grid | ✅ effectively yes |
+
+---
+
+## See also
+
+- **Export failing or warning?** (E016, W012, duplicate `.sbc`, reading the log) →
+  [`troubleshooting/export-errors.md`](troubleshooting/export-errors.md)
+- **Block wrong size / clipping in-game?** →
+  [`troubleshooting/size-and-placement.md`](troubleshooting/size-and-placement.md)
+- **Mount points / conveyor ports not connecting?** →
+  [`conveyors/`](conveyors/README.md)
+- **Ready to install & publish?** →
+  [`install-and-publish-checklist.md`](install-and-publish-checklist.md)

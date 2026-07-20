@@ -7,6 +7,11 @@ Conveyor ports and interaction points are defined by **named dummies (empties)**
 placed in the block's model, exported through SEUT. The `.sbc` definition rarely
 declares ports directly — the **model dummies drive it**.
 
+> **Just trying to get a port working?** Use the task guides instead:
+> [how-to/conveyors/conveyor-dummies.md](../how-to/conveyors/conveyor-dummies.md) (naming,
+> orientation, parenting, "connector not recognized" checklist) and
+> [how-to/conveyors/mount-points.md](../how-to/conveyors/mount-points.md) (sizing them).
+
 ## Defining conveyor ports (detector dummies)
 
 The block model needs **`detector_conveyor*`** dummies to connect to the conveyor

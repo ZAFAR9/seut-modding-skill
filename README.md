@@ -21,6 +21,10 @@ Pick the row that matches you. Click the link. That's it.
 | 🖼️ **Open or edit `.dds` texture files** (in GIMP) | [how-to/work-with-dds-textures](how-to/work-with-dds-textures.md) |
 | ✏️ **Edit a mod I downloaded from the Workshop** | [how-to/edit-workshop-mods](how-to/edit-workshop-mods.md) |
 | ❓ **Understand SEUT terms** (LODs, BS, collision, mount points, mirroring…) | [how-to/blender-seut-concepts](how-to/blender-seut-concepts.md) |
+| 🧯 **Fix an export error** (E016, W012, duplicate `.sbc`) | [how-to/troubleshooting](how-to/troubleshooting/README.md) |
+| 📐 **Block acts 1×1 / floats / clips** through the map | [how-to/troubleshooting/size-and-placement](how-to/troubleshooting/size-and-placement.md) |
+| 🔗 **Conveyor port won't connect** / set up mount points | [how-to/conveyors](how-to/conveyors/README.md) |
+| 🚚 **Install my mod locally & get it ready to publish** | [how-to/install-and-publish-checklist](how-to/install-and-publish-checklist.md) |
 | 📖 **Look up how something works** (fields, formats, rules) | [reference/](reference/) |
 | 📦 **Copy a complete working mod** to learn from | [examples/ExampleConveyorCargo](examples/ExampleConveyorCargo/) |
 | 🕳️ **Make an infinite-storage container** (with C# logic) | [examples/BlackHoleContainer](examples/BlackHoleContainer/) |
@@ -38,6 +42,8 @@ Pick the row that matches you. Click the link. That's it.
 ```
 seut-modding/
 ├── how-to/      ← step-by-step walkthroughs. START HERE.  (do a thing)
+│   ├── troubleshooting/  ← export errors + size/placement bugs
+│   └── conveyors/        ← mount points + conveyor dummies
 ├── reference/   ← look-it-up encyclopedia.               (understand a thing)
 ├── examples/    ← full, working mods to copy from (conveyor cargo + infinite storage).
 ├── advanced/    ← teardowns of real published mods + frameworks.
@@ -79,7 +85,10 @@ The jargon that trips everyone up at first:
 | [fix-voxel-textures](how-to/fix-voxel-textures.md) | Magenta / flat / black symptom → cause → fix |
 | [work-with-dds-textures](how-to/work-with-dds-textures.md) | Open / inspect / combine DDS in GIMP, what AO is |
 | [blender-seut-concepts](how-to/blender-seut-concepts.md) | LODs, Build Stages, collision, mount points, bounding box, mirroring, icon render, import/export — explained |
+| [install-and-publish-checklist](how-to/install-and-publish-checklist.md) | Load the mod locally, F11 test, and what a complete mod needs before publishing |
 | [edit-workshop-mods](how-to/edit-workshop-mods.md) | Copy Workshop mod → local → offline test → edit |
+| [troubleshooting/](how-to/troubleshooting/README.md) 🧯 | **Export errors** (E016 / W012 / duplicate `.sbc`) and **size/placement** bugs (1×1, clipping, multi-cell) |
+| [conveyors/](how-to/conveyors/README.md) 🔗 | **Mount points** (sizing + SEUT visual tool) and **conveyor dummies** (why a connector isn't recognized) |
 
 ## 📗 reference/ — encyclopedia (understand a thing)
 
@@ -143,6 +152,15 @@ python3 scripts/sbc_tool.py new-material --name MyMat --tech DECAL_CUTOUT
   Full fix: [fix-voxel-textures](how-to/fix-voxel-textures.md).
 - **"My mod won't load in-game."** → Almost always a `.sbc` typo or a SubtypeId that
   doesn't match. Run `sbc_tool.py validate`, then check [sbc-xml-basics](reference/sbc-xml-basics.md).
+- **"SEUT export fails with E016 / warns W012."** → E016 = more than one unparented
+  top-level object (parent them under one root); W012 = a DLC material (swap it for a
+  free one). Full fixes: [troubleshooting/export-errors](how-to/troubleshooting/export-errors.md).
+- **"My block is huge in Blender but acts 1×1, or floats/clips through the map."** →
+  `<Size>`, the SEUT bounding box, and the mesh origin must all agree.
+  [troubleshooting/size-and-placement](how-to/troubleshooting/size-and-placement.md).
+- **"My conveyor port isn't recognized / items won't flow."** → You need a named
+  `detector_conveyor_N` dummy empty, oriented outward and parented to the model.
+  [conveyors/conveyor-dummies](how-to/conveyors/conveyor-dummies.md).
 - **"What's the difference between a script mod and a Programmable Block script?"** →
   [xml-and-scripting](reference/xml-and-scripting.md) explains both.
 - **"Textures look wrong / washed out."** → Check resolution (2048×2048) and format

@@ -27,7 +27,19 @@ Then use the rest as you hit specific needs.
 | [fix-voxel-textures](fix-voxel-textures.md) | Textures render **magenta, black, or flat** and you need the cause + fix. |
 | [work-with-dds-textures](work-with-dds-textures.md) | You need to open, inspect, or combine `.dds` files (in GIMP). |
 | [blender-seut-concepts](blender-seut-concepts.md) | You want to **understand LODs, Build Stages, collision, mount points, bounding box, mirroring, icon render, import & export**. |
+| [install-and-publish-checklist](install-and-publish-checklist.md) | You're ready to **load the mod locally**, test it, and check what's needed before publishing. |
 | [edit-workshop-mods](edit-workshop-mods.md) | You want to copy a Steam Workshop mod locally and edit it. |
+
+---
+
+## 🧯 Troubleshooting subpages
+
+When something breaks, these focused pages go straight to cause + fix:
+
+| Folder | Covers |
+|---|---|
+| **[troubleshooting/](troubleshooting/README.md)** | SEUT export errors (**E016**, **W012**, duplicate `.sbc`, reading a clean log) and **size/placement** bugs (block acts 1×1, floats/clips, multi-cell alignment, measuring a model). |
+| **[conveyors/](conveyors/README.md)** | **Mount points** (sizing, cell math, SEUT visual tool) and **conveyor dummies** (`detector_conveyor_N` — why a connector "isn't recognized"). |
 
 ---
 
