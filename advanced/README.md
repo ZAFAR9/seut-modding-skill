@@ -27,6 +27,7 @@ only) so you can read the real thing.
 | 🎛️ Control a **whole grid with text commands** (in-game, no mod) | [Mother OS](#-mother-os) |
 | 🩺 Show a **live ship-integrity / status map** on LCDs (in-game) | [Whip's SIMPL](#-whips-simpl) |
 | 🛸 Build a **custom cockpit HUD / on-screen overlay** from a mod | [EliDangHUD](#-elidanghud) |
+| 🖥️ Show a **custom text line in a block's terminal** (DetailInfo) | [Custom Terminal Readouts](#-custom-terminal-readouts-detailinfo) |
 
 ---
 
@@ -203,3 +204,17 @@ The source in these folders belongs to its respective authors (ARYX/AWE, Mod Adj
 Definition Extension API by Draygo, BuildInfo by Digi, Animation Engine by Math0424,
 Mother OS by Agentluke, SIMPL by Whiplash141, EliDangHUD) under their own licenses,
 and is vendored here **for study only**. See the repo [LICENSE](../LICENSE).
+
+---
+
+## 🖥️ Custom Terminal Readouts (DetailInfo)
+
+**Doc:** [custom-terminal-detailinfo.md](custom-terminal-detailinfo.md)
+
+How to print your own live text into a block's terminal info panel (the DetailInfo box on
+the right of the control screen) from a `MyGameLogicComponent`, via
+`AppendingCustomInfo` + `RefreshCustomInfo()`. Covers what you **can't** change (the
+engine's `L` fill bar isn't moddable), the always-unhook-in-`Close()` rule, and the
+**font gotcha**: SE's terminal font has no `∞` glyph (renders as `?`) — use words/ASCII.
+Reach for this whenever a block needs a status/capacity/label line. The
+[Black Hole Container example](../examples/BlackHoleContainer/README.md) uses it.

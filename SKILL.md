@@ -21,7 +21,9 @@ Task-oriented guides for *doing* things:
   mount points, icon render mode, bounding box, mirroring mode, + how to import/export.
 - `how-to/install-and-publish-checklist.md` — load a mod locally (%AppData% Mods),
   F11 test, OneDrive gotcha, and what a complete mod needs before publishing.
-- `how-to/troubleshooting/` — focused fix pages: `export-errors.md` (E016 unparented,
+- `how-to/troubleshooting/` — focused fix pages: `dead-ports-case-study.md` (places &
+  mounts fine but conveyor ports dead — full triage + the vanilla-dummy fix),
+  `export-errors.md` (E016 unparented,
   W012 DLC material, SEUT's duplicate auto-`.sbc`, reading a clean I007/I008 log) and
   `size-and-placement.md` (block acts 1×1, off-origin clipping, `<Size>`↔bounding
   box↔mesh-origin must agree, measuring a `.glb`).
@@ -70,6 +72,9 @@ Encyclopedic reference to *look things up*:
 
 Learnings extracted from complete shipping mods. See `advanced/README.md`.
 
+- `advanced/custom-terminal-detailinfo.md` — print custom text in a block's terminal
+  DetailInfo panel via `AppendingCustomInfo`; engine `L` bar isn't moddable; SE terminal
+  font can't render `∞` (shows `?`) — use words. Used by the BlackHoleContainer example.
 - `advanced/aryx-mod/` — the **ARYX / AWE** WeaponCore weapons pack (82 weapons):
   vendored **text/definition files only** (`.cs`, `.sbc`), teardown in
   `advanced/aryx-mod/OVERVIEW.md`. Binaries (1161 .mwm / 195 .dds / 214 .wav) not in repo.

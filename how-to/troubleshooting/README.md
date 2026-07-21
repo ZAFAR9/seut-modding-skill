@@ -19,6 +19,7 @@ single problem with its cause and fix. Jump straight to your symptom.
 | Block **floats / clips through the map** away from where you placed it | [size-and-placement → off-origin clipping](size-and-placement.md#off-origin-model--clipping) |
 | Multi-cell block won't line up right | [size-and-placement → the three must agree](size-and-placement.md#the-three-that-must-agree) |
 | Can't figure out the **right `<Size>`** for a model | [size-and-placement → measuring a model](size-and-placement.md#measuring-a-model-from-its-glb) |
+| **Ports dead** though it places & mounts fine (full walkthrough) | [dead-ports-case-study.md](dead-ports-case-study.md) |
 
 ---
 
@@ -26,5 +27,6 @@ single problem with its cause and fix. Jump straight to your symptom.
 
 - **[export-errors.md](export-errors.md)** — SEUT console errors/warnings: E016, W012, the duplicate-`.sbc` trap, and how to read a clean export log.
 - **[size-and-placement.md](size-and-placement.md)** — why a block acts 1×1 or clips through the world, and the `<Size>` ↔ bounding box ↔ mesh-origin rule for multi-cell blocks. Includes how to measure a `.glb`.
+- **[dead-ports-case-study.md](dead-ports-case-study.md)** — a full real debugging arc: block places & mounts fine but conveyor ports are dead. What we ruled out (size, octant, geometry-vs-dummy) and the fix that worked (borrow a vanilla dummy).
 
 **Conveyor ports not connecting?** That's its own topic → [how-to/conveyors/](../conveyors/README.md).

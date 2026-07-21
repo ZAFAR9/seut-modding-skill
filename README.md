@@ -23,6 +23,8 @@ Pick the row that matches you. Click the link. That's it.
 | ❓ **Understand SEUT terms** (LODs, BS, collision, mount points, mirroring…) | [how-to/blender-seut-concepts](how-to/blender-seut-concepts.md) |
 | 🧯 **Fix an export error** (E016, W012, duplicate `.sbc`) | [how-to/troubleshooting](how-to/troubleshooting/README.md) |
 | 📐 **Block acts 1×1 / floats / clips** through the map | [how-to/troubleshooting/size-and-placement](how-to/troubleshooting/size-and-placement.md) |
+| 🔌 **Block places & mounts fine but conveyor ports are dead** | [how-to/troubleshooting/dead-ports-case-study](how-to/troubleshooting/dead-ports-case-study.md) |
+| 🖥️ **Show custom text in a block's terminal** (DetailInfo) | [advanced/custom-terminal-detailinfo](advanced/custom-terminal-detailinfo.md) |
 | 🔗 **Conveyor port won't connect** / set up mount points | [how-to/conveyors](how-to/conveyors/README.md) |
 | 🚚 **Install my mod locally & get it ready to publish** | [how-to/install-and-publish-checklist](how-to/install-and-publish-checklist.md) |
 | 📖 **Look up how something works** (fields, formats, rules) | [reference/](reference/) |
@@ -129,6 +131,7 @@ Patterns pulled from complete published mods and frameworks. Full index in
 - **[Mother OS](advanced/mother-os.md)** — an in-game command framework for whole grids.
 - **[Whip's SIMPL](advanced/whip-simpl.md)** — in-game ship-integrity map on LCDs (great Custom Data config example).
 - **[EliDangHUD](advanced/elidanghud.md)** — Elite-Dangerous-style cockpit HUD; how to draw billboards from a mod.
+- **[Custom Terminal Readouts](advanced/custom-terminal-detailinfo.md)** — print your own live text in a block's terminal DetailInfo panel (incl. the `∞`→`?` font gotcha).
 
 ---
 

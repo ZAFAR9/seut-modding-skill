@@ -58,9 +58,33 @@ A `MyGameLogicComponent` bound by the attribute:
   2. `SetFlags(CanReceive | CanSend)` — normal I/O, no count cap.
   3. `Constraint = null` — accept **any** item type.
   4. `Refresh()` — push the new limits to the UI.
+- It also hooks `AppendingCustomInfo` to print a custom line in the terminal's
+  **DetailInfo** box:
+  ```
+  Capacity: Infinite
+  Stored: 1,234 L / Infinite
+  Stacks: no limit
+  ```
+  and unhooks it in `Close()`. See
+  [advanced/custom-terminal-detailinfo.md](../../advanced/custom-terminal-detailinfo.md).
 
 Why "1e9 m³" and not literally infinite: `float.MaxValue` can produce NaN/overflow in
 the cargo-fill bar. A billion cubic metres is unfillable in practice.
+
+Why the word "Infinite" and not the `∞` symbol: SE's **terminal font has no `∞` glyph**
+(U+221E) — it renders as `?`. Words/ASCII always render. (∞ *does* work on LCD panels,
+which use a fuller font — just not in the DetailInfo box.)
+
+## Model side: getting the conveyor ports to work
+
+This example is the definition+script half. On the **model** side, the ports only work if
+your `.mwm` contains real **detector dummies** — and hand-built empties often get stripped
+on export. The reliable trick: **import a vanilla CargoContainer in SEUT, tear off its
+`detector_conveyor_1` empty, reposition + parent it onto your block, and delete the vanilla
+mesh** (duplicate it for a 2nd port). Full steps:
+[how-to/conveyors/conveyor-dummies.md → borrow a working dummy](../../how-to/conveyors/conveyor-dummies.md#-the-reliable-method-borrow-a-working-dummy-from-a-vanilla-import).
+If it "places fine but ports are dead," walk
+[the case study](../../how-to/troubleshooting/dead-ports-case-study.md).
 
 ## Install & test
 

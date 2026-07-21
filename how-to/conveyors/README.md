@@ -14,6 +14,8 @@ connect."
 |---|---|
 | Block won't **snap onto** other blocks / places over empty air | [mount-points.md](mount-points.md) |
 | Conveyor **port isn't recognized** — items won't flow, no connection | [conveyor-dummies.md](conveyor-dummies.md) |
+| Dummies **won't export / Debug Dummies shows none** — the reliable fix | [conveyor-dummies.md → borrow a vanilla dummy](conveyor-dummies.md#-the-reliable-method-borrow-a-working-dummy-from-a-vanilla-import) |
+| Full **"places fine but ports dead"** debugging walkthrough | [../troubleshooting/dead-ports-case-study.md](../troubleshooting/dead-ports-case-study.md) |
 | I want the mount points to be **exactly right** (visual tool + the cell math) | [mount-points.md → getting them perfect](mount-points.md#getting-mount-points-perfect) |
 | I don't know how big to make the mount patch | [mount-points.md → sizing](mount-points.md#how-large-should-a-mount-point-be) |
 
