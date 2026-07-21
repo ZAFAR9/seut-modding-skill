@@ -158,6 +158,15 @@ python3 scripts/sbc_tool.py new-material --name NAME [--tech DECAL_CUTOUT]
   **distance-cull + client-only** (`!IsDedicated`) any per-frame visual work; (6) `sbc_tool.py
   validate` before repackaging. Full checklist: `how-to/scripting/crash-safety-checklist.md`.
 
+- **Custom material exports PITCH BLACK? Textures weren't baked into the `.mwm`.** The
+  material name is in the model but its CM/NG/ADD texture paths are **empty** (verify:
+  `strings -n 6 X.mwm | grep ColorMetalTexture` — your custom mat's `_cm.dds` line is absent).
+  Putting the DDS in `Textures\Models\Cubes\` does nothing if the model doesn't reference it,
+  and you can't safely patch the `.mwm` binary (shifts offsets → corrupts). Fix at export:
+  point slots at the in-mod DDS, assign via the **SEUT node group** (not a loose Image Texture
+  node), Technique=MESH, then **Convert Textures ▸ Export Materials BEFORE Export All** so SEUT
+  bakes the paths. See `how-to/troubleshooting/black-untextured-material.md`.
+
 - **Conveyor dummies won't export? Don't hand-build them.** The reliable fix is to
   **import a vanilla CargoContainer in SEUT, tear off its `detector_conveyor_1` empty**
   (Alt+P ▸ Clear Parent Keep Transform), reposition + reparent onto the block, **drag it

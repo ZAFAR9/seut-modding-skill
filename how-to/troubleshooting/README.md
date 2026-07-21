@@ -20,6 +20,7 @@ single problem with its cause and fix. Jump straight to your symptom.
 | Multi-cell block won't line up right | [size-and-placement → the three must agree](size-and-placement.md#the-three-that-must-agree) |
 | Can't figure out the **right `<Size>`** for a model | [size-and-placement → measuring a model](size-and-placement.md#measuring-a-model-from-its-glb) |
 | **Ports dead** though it places & mounts fine (full walkthrough) | [dead-ports-case-study.md](dead-ports-case-study.md) |
+| Custom material renders **PITCH BLACK** in-game (textures not baked) | [black-untextured-material.md](black-untextured-material.md) |
 
 ---
 
