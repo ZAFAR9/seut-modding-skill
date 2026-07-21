@@ -45,3 +45,7 @@ When something breaks, these focused pages go straight to cause + fix:
 
 **Looking to *understand* how something works rather than do a task?**
 Head to [reference/](../reference/) instead.
+
+## Scripting (C#)
+
+- [scripting/crash-safety-checklist.md](scripting/crash-safety-checklist.md) — **mandatory** crash-safety pre-flight before shipping any game-logic/session script (try/catch per-frame, first-frame guards, API verification, master switch, cull+client-only, validate+test).

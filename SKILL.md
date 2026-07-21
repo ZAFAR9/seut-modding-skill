@@ -144,6 +144,20 @@ python3 scripts/sbc_tool.py new-material --name NAME [--tech DECAL_CUTOUT]
 
 ### ⚡ Hard-won lessons (apply BEFORE guessing)
 
+- **⚠️ NEVER ship a game-logic C# script without crash-safety guards.** One unhandled
+  exception in a per-frame callback (`UpdateAfterSimulation`, `UpdateBeforeSimulation`,
+  `UpdateAfterSimulation10/100`) **crashes SE to desktop instantly** — it is NOT a catchable
+  log error like a compile fault. Mandatory pre-flight for ANY script: (1) wrap every
+  per-frame/event body (`Update*`, `AppendingCustomInfo`, `Close`, handlers) in **try/catch**
+  that logs via `MyLog.Default.WriteLineAndConsole` and **self-disables** (clear the
+  `EACH_FRAME` flag / set a disabled bool) — never rethrow; (2) guard first-frame races
+  (`Entity != null && !Entity.MarkedForClose`, `Entity.InScene`, `Entity.Render != null`,
+  `CubeGrid?.Physics != null` to skip projections, null-check `Session`/`Camera`); (3) verify
+  every API against vendored `advanced/` source — don't invent signatures; (4) give visual /
+  experimental features a **master `const bool` switch** so they can ship OFF; (5)
+  **distance-cull + client-only** (`!IsDedicated`) any per-frame visual work; (6) `sbc_tool.py
+  validate` before repackaging. Full checklist: `how-to/scripting/crash-safety-checklist.md`.
+
 - **Conveyor dummies won't export? Don't hand-build them.** The reliable fix is to
   **import a vanilla CargoContainer in SEUT, tear off its `detector_conveyor_1` empty**
   (Alt+P ▸ Clear Parent Keep Transform), reposition + reparent onto the block, **drag it
