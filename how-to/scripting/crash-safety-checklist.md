@@ -179,3 +179,29 @@ public class MyLogic : MyGameLogicComponent
 - `advanced/custom-terminal-detailinfo.md` — DetailInfo pattern (also needs guarded `Close`)
 - `advanced/animation-engine.md` — verified subpart/emissive animation APIs
 - `how-to/troubleshooting/dead-ports-case-study.md` — debugging methodology
+
+
+## Whitelist gotchas — float vs double math types
+
+The mod whitelist is picky about which VRageMath overloads are allowed. A blocked
+API **stops compilation** with a message like *"'Matrix' does not contain a
+definition for 'Decompose'"* — even though the method exists. It's the whitelist
+hiding it, not a missing using/reference.
+
+**Known trap: `Matrix.Decompose` (float) is NOT whitelisted; `MatrixD.Decompose`
+(double) IS.** To split a local matrix into scale/rotation/translation, use the
+double-precision path and convert back if your fields are float:
+
+```csharp
+MatrixD rest = subpart.PositionComp.LocalMatrixRef; // implicit Matrix->MatrixD
+Vector3D scaleD; QuaternionD rotD; Vector3D posD;
+if (!rest.Decompose(out scaleD, out rotD, out posD)) { /* degenerate: disable */ }
+Vector3    scale = (Vector3)scaleD;
+Quaternion rot   = new Quaternion((float)rotD.X,(float)rotD.Y,(float)rotD.Z,(float)rotD.W);
+Vector3    pos   = (Vector3)posD;
+```
+
+Rule of thumb when a VRageMath method "doesn't exist": try the **`D` (double)
+variant** (`MatrixD`, `Vector3D`, `QuaternionD`) — it's usually the whitelisted
+one. Confirmed against the SE MatrixD API reference.
+
