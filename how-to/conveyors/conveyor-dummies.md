@@ -7,7 +7,8 @@ conveyor *geometry* but no conveyor *dummy*.
 ← [Conveyors & mount points index](README.md) · [Main README](../../README.md)
 
 **On this page:** [why it isn't recognized](#why-a-connector-isnt-recognized) ·
-[the named dummies](#the-named-dummy-empties) · [orientation](#orientation-matters) ·
+[the named dummies](#the-named-dummy-empties) ·
+[step-by-step in Blender](#step-by-step-place-a-dummy-in-blender) · [orientation](#orientation-matters) ·
 [parenting](#parenting) · [checklist](#connector-not-recognized-checklist)
 
 ---
@@ -42,6 +43,34 @@ be, at the spot where items enter/exit.
 **Example** (a container with top + bottom center ports): one `detector_conveyor_1` at the
 top-center of the block, one `detector_conveyor_2` at the bottom-center — both centered on
 X/Z, sitting on the respective faces.
+
+---
+
+## Step-by-step: place a dummy in Blender
+
+The reliable way to land a dummy exactly on an existing conveyor spot is the **Snap
+Cursor** method — no eyeballing coordinates.
+
+> **Axis note:** glTF/`.glb` is **Y-up**, but Blender is **Z-up**. A port that reads as
+> "top/bottom on Y" in a `.glb` is **top/bottom on Z** inside Blender. So a vertical
+> container's ports sit on the **+Z (top)** and **−Z (bottom)** faces in Blender.
+
+1. **Add the empty.** Object Mode ▸ **Add ▸ Empty ▸ Plain Axes**. (Position doesn't
+   matter yet.)
+2. **Rename it exactly.** In the Outliner, double-click it and type
+   `detector_conveyor_1` — lowercase, exact spelling. A typo = no port.
+3. **Snap it onto the port spot.** Select the mesh/marker where the port belongs, then
+   **Shift + S ▸ Cursor to Selected** (moves the 3D cursor there). Now select the empty
+   and **Shift + S ▸ Selection to Cursor** — the empty jumps onto the port.
+4. **Orient it** so its forward (**−Z**) arrow points **out** of the face (see
+   [orientation](#orientation-matters) below). Top port → forward points up; bottom port →
+   forward points down.
+5. **Repeat** for each port: add another Plain Axes empty, rename `detector_conveyor_2`,
+   snap it to the next port spot, orient it outward.
+6. **Parent them all** to the main model (see [parenting](#parenting)).
+7. **Confirm collection.** The dummies must live in the **Main** SEUT collection (same as
+   the model) or they won't export.
+8. **Export**, and watch the console for `I007` + `I008` with no `E016`.
 
 ---
 
