@@ -47,6 +47,49 @@ sections) and corrupts the file. Fix it in Blender instead:
 5. Re-export, then re-verify with the `strings` command above — the
    `..._cm.dds` path must now be present.
 
+
+## ⭐ Decisive test: read the exported MaterialsLib XML
+
+SEUT writes a material-library XML next to the export (e.g. `SAVEME BLACK HOLE.xml`),
+`<MaterialsLib>` with one `<Material>` block per material **SEUT actually
+exported**. This is the single fastest diagnosis:
+
+```
+<MaterialsLib Name="...">
+  <Material Name="PaintedMetal_Yellow"> ... has ColorMetalTexture ... </Material>
+  <!-- EmissiveAccretion is ABSENT -->
+</MaterialsLib>
+```
+
+**If your custom material is NOT listed in this XML at all**, SEUT is not treating
+it as an exportable custom material — so the `.mwm` gets the material *name* with
+empty textures → pitch black. (Vanilla materials can be absent too and still work,
+because SE already ships them; your custom one MUST be present.)
+
+## The actual root cause (confirmed over multiple re-exports)
+
+The material was **not set up as a SEUT Custom/Local material**. Assigning a DDS in
+a plain Blender Image Texture node, or leaving the material on a preset/library
+type, makes SEUT skip it — it never enters the MaterialsLib XML no matter how many
+times you re-export or click Export Materials.
+
+**The fix that actually registers it** (do this exactly):
+1. Select the object. Open the **SEUT** tab (not just Blender's Material
+   Properties).
+2. Set the material's **SEUT preset to `Custom`** so the SEUT shader node group
+   appears.
+3. In that **SEUT node group**, fill **CM Color** with `<Mat>_cm.dds`, **ADD
+   Color** with `<Mat>_add.dds` (emissive in the green channel), NG if you have it.
+4. Technique = **MESH**.
+5. Export. **Confirm** the material now appears in the exported `<MaterialsLib>`
+   XML with a `ColorMetalTexture` line. If it's still absent, the preset is still
+   not `Custom` — that is the blocker, not the textures.
+
+**Subpart note:** a subpart mesh (`subpart_<name>`) exported inside the main
+`.mwm` still needs its material set up the same way. Being a subpart does not
+exempt it — its custom material must still be a SEUT Custom material to get
+textures baked.
+
 ## Emissive specifics
 
 - Material name must start with `Emissive` for SE to treat it as self-lit, and
