@@ -10,7 +10,7 @@ SEUT export**.
 **On this page:** [why it isn't recognized](#why-a-connector-isnt-recognized) ·
 [⭐ the reliable method: steal a working dummy](#-the-reliable-method-borrow-a-working-dummy-from-a-vanilla-import) ·
 [the named dummies](#the-named-dummy-empties) ·
-[manual placement](#manual-alternative-place-a-dummy-from-scratch) · [orientation](#orientation-matters) ·
+[manual placement](#manual-alternative-place-a-dummy-from-scratch) · [orientation](#orientation-matters) · [exact position (grid plane)](#exact-position-the-dummy-must-sit-on-the-cell-face-plane) ·
 [parenting](#parenting) · [why dummies dont export](#why-dummies-dont-carry-over-on-export) ·
 [checklist](#connector-not-recognized-checklist)
 
@@ -155,6 +155,51 @@ forward points *into* the block, SE sees the port facing inward and **won't conn
 
 ---
 
+## Exact position: the dummy must sit on the cell-face plane
+
+A dummy can be **named right, oriented right, and still misalign** with the ports on
+neighbouring blocks. That's a *position* bug: conveyor snapping is driven by the **dummy's
+origin**, not by your mesh. If the origin is even ~0.2 m short of the true grid boundary,
+the port floats off-grid and won't sit flush against an adjacent block's port.
+
+**The rule:** a conveyor dummy must sit **exactly on the block's cell-face plane**.
+
+For a Large grid (1 cell = **2.5 m**), a block that is **N cells** across has its outer face
+at this distance **from the block centre**:
+
+```
+face offset = (N × 2.5) ÷ 2   =   N × 1.25   (metres from centre)
+```
+
+| Block size on that axis (cells) | Face plane (± from centre) |
+|---|---|
+| 3 | ±3.75 m |
+| 5 | ±6.25 m |
+| 7 | ±8.75 m |
+| 9 | ±11.25 m |
+
+Small grid uses **0.5 m** cells → `face offset = N × 0.25`.
+
+So a **7-cell-tall** block's top/bottom ports must sit at **Y = ±8.75 m** (assuming the model
+is centred on the origin). The other two axes stay at **0** so the port is centred on the
+face. Example for a vertical 7×7×7 container with top + bottom ports:
+
+| Dummy | X | Y | Z | Rotation |
+|---|---|---|---|---|
+| `detector_conveyor_1` (top) | 0 | **+8.75** | 0 | X = 180° (forward −Z points up) |
+| `detector_conveyor_2` (bottom) | 0 | **−8.75** | 0 | 0 (forward −Z points down) |
+
+**How to set it in Blender:** select the dummy, open the **N-panel ▸ Item ▸ Location**, and
+type the exact value (e.g. `Y = 8.75`). Don't eyeball it — a value like `8.53` *looks* right
+but is a fifth of a metre off the grid and will misalign in-game.
+
+> **If the model isn't centred on the origin**, the face plane is `centre ± N×1.25` on that
+> axis — so recentre the mesh to `0,0,0` first (or add the centre offset to the dummy). A
+> model whose bounding-box centre is off by a few cm will also throw the dummies off by the
+> same amount. Recentre, then place dummies on the clean `±N×1.25` planes.
+
+---
+
 ## Parenting
 
 The dummy must **export with the model**, so **parent it to your main block object**:
@@ -202,6 +247,8 @@ Run through this in order:
       `detector_conveyorsmall_N` (small). ← most common miss
 - [ ] Dummy is a **Cube/Arrows empty with non-zero scale** (not zero-size Plain Axes).
 - [ ] Dummy **forward axis (−Z) points OUT** of the block face.
+- [ ] Dummy **origin sits exactly on the cell-face plane** — `±(cells × 1.25) m` from centre
+      (Large grid). Off-by-0.2 m = ports don't line up with neighbours.
 - [ ] Dummy **parented** to the main model **and** in the **Main SEUT collection**.
 - [ ] Dummy is **visible in SEUT's Debug Dummies** display (if not, it won't export).
 - [ ] A **mount point** exists on that face, covering the port location.

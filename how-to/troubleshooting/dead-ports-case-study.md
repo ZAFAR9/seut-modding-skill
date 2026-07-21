@@ -95,6 +95,20 @@ game-proven part instead of gambling on manual setup. Full write-up:
 
 ---
 
+## Step 5 - dummies show up but don't align with neighbouring ports
+
+Once the dummies export and the ports are live, the last gotcha is **position**. Conveyor
+snapping uses the **dummy origin**, not the mesh - so a dummy sitting slightly inside the
+face (e.g. Y = 8.53 on a 7-tall block) will connect *off-grid* and won't sit flush against
+an adjacent block's port.
+
+**Fix:** put each dummy exactly on the **cell-face plane**: `+/- (cells x 1.25) m` from the
+block centre on Large grid (`x 0.25` on Small). A 7-cell block -> **+/-8.75 m**; keep the
+other two axes at 0 to centre the port. Full math + table:
+[conveyor-dummies.md -> exact position](../conveyors/conveyor-dummies.md#exact-position-the-dummy-must-sit-on-the-cell-face-plane).
+
+---
+
 ## Quick triage table
 
 | You observe | Most likely cause | Go to |
@@ -104,6 +118,7 @@ game-proven part instead of gambling on manual setup. Full write-up:
 | Ports dead, only port-shaped **mesh** exists | no detector dummy | [conveyor-dummies.md](../conveyors/conveyor-dummies.md) |
 | Dummies added but **Debug Dummies shows none** | wrong collection / zero-size / bad name | [conveyor-dummies.md → why dummies don't export](../conveyors/conveyor-dummies.md#why-dummies-dont-carry-over-on-export) |
 | Tried everything, still dead | hand-built dummy stripped | [borrow a vanilla dummy](../conveyors/conveyor-dummies.md#-the-reliable-method-borrow-a-working-dummy-from-a-vanilla-import) |
+| Ports **connect but don't line up** with neighbours | dummy origin off the grid plane | [conveyor-dummies → exact position](../conveyors/conveyor-dummies.md#exact-position-the-dummy-must-sit-on-the-cell-face-plane) |
 
 ---
 

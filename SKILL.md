@@ -154,6 +154,11 @@ python3 scripts/sbc_tool.py new-material --name NAME [--tech DECAL_CUTOUT]
   Main collection. Zero-size Plain Axes empties also get dropped — use Cube/Arrows + real
   scale. **If SEUT's Debug Dummies overlay shows nothing, the ports will be dead in-game** —
   same root cause. See `how-to/troubleshooting/dead-ports-case-study.md`.
+- **Conveyor dummies misaligned with neighbours? It's the dummy ORIGIN, not the mesh.** A
+  port must sit exactly on the cell-face plane: **`± (cells × 1.25) m`** from block centre
+  (Large grid; `× 0.25` Small). 7-cell block → **±8.75 m**, other two axes at 0. Set it via
+  Blender N-panel ▸ Location — don't eyeball (8.53 vs 8.75 = off-grid). If the mesh centre is
+  offset, recentre to 0,0,0 first. See `how-to/conveyors/conveyor-dummies.md#exact-position`.
 - **A block that places flat and mounts correctly does NOT have a size/octant problem.**
   Don't chase `<Size>` or positive-octant alignment when ports are the real issue. Re-measure
   the *current* `.glb` (cells = dim ÷ 2.5 Large / ÷ 0.5 Small) before touching `<Size>` — a
