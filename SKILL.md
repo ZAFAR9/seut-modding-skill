@@ -142,6 +142,35 @@ python3 scripts/sbc_tool.py new-material --name NAME [--tech DECAL_CUTOUT]
 - **Always** copy vanilla `.sbc` from the game folder rather than authoring from
   scratch, and keep the `.sbc` extension lowercase.
 
+### ⚡ Hard-won lessons (apply BEFORE guessing)
+
+- **Conveyor dummies won't export? Don't hand-build them.** The reliable fix is to
+  **import a vanilla CargoContainer in SEUT, tear off its `detector_conveyor_1` empty**
+  (Alt+P ▸ Clear Parent Keep Transform), reposition + reparent onto the block, **drag it
+  into the Main collection**, delete the vanilla mesh, Shift+D for more ports. A vanilla
+  dummy carries the exact type/scale/props MwmBuilder needs, so it isn't stripped.
+- **The #1 reason dummies vanish = wrong collection.** SEUT exports **per-collection** and
+  only writes empties in the **Main** collection. Parenting is NOT the same as being in the
+  Main collection. Zero-size Plain Axes empties also get dropped — use Cube/Arrows + real
+  scale. **If SEUT's Debug Dummies overlay shows nothing, the ports will be dead in-game** —
+  same root cause. See `how-to/troubleshooting/dead-ports-case-study.md`.
+- **A block that places flat and mounts correctly does NOT have a size/octant problem.**
+  Don't chase `<Size>` or positive-octant alignment when ports are the real issue. Re-measure
+  the *current* `.glb` (cells = dim ÷ 2.5 Large / ÷ 0.5 Small) before touching `<Size>` — a
+  stale export is a classic false lead.
+- **SE's terminal DetailInfo font has no `∞` glyph** (U+221E → renders as `?`). Use words
+  ("Infinite") / ASCII in `AppendingCustomInfo`. ∞ works on LCD text panels (fuller font),
+  just not the terminal DetailInfo box. The engine inventory `L` fill bar is **not moddable**
+  — you can only add a line beside it. See `advanced/custom-terminal-detailinfo.md`.
+- **SEUT is a Blender 4.x addon.** Blender 5.x breaks Icon Render (`scene.node_tree` removed
+  → blank icon) and install (`PATH_SUPPORTS_BLEND_RELATIVE` enum). Use Blender 4.2 LTS / 4.3.
+  After a failed install, **delete the whole `space-engineers-utilities` addon folder** before
+  reinstalling — a half-registered copy throws `already registered` / `cannot import name`.
+- **GitHub push (Git Data API):** blobs → tree → commit → PATCH ref. Sleep **0.35–0.7s**
+  between blob uploads; **re-read the main HEAD SHA immediately before the PATCH** and
+  re-commit onto it if it moved (avoids 422). For 500+ files, run it in a **tmux** session
+  (bash tool times out at 300s).
+
 ## Sources
 Archived from spaceengineers.wiki.gg (Modding/Reference, SEUT pages) + verified
 research, 2026-07-17 and 2026-07-20. See individual files for URLs.
