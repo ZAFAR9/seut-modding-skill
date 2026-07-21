@@ -90,6 +90,27 @@ times you re-export or click Export Materials.
 exempt it — its custom material must still be a SEUT Custom material to get
 textures baked.
 
+
+## ⭐⭐ THE root cause (from the official SEUT tutorial + Shader Editor ref)
+
+If your material is **missing entirely from the exported MaterialsLib XML** (only
+some other material shows up), it is almost always ONE of these two — confirmed
+against the official wiki:
+
+1. **The material is LINKED, not LOCAL.** Official Shader Editor ref: *"If the
+   options in this section are greyed out, that is because the currently active
+   material is linked into the BLEND-file. Unless the material is made local, it
+   cannot be edited directly."* A linked/appended material CANNOT be exported by
+   SEUT → it never enters the MaterialsLib. **Fix: Material dropdown ▸ Make Local.**
+2. **Textures are not under a `\Textures\` path.** Official tutorial: textures
+   must be placed in `[SEUT Assets]\Textures\Custom\<name>\` (or any dir whose
+   path contains `\Textures\`) *"so that SEUT can convert the path to a relative
+   one."* Textures elsewhere → SEUT drops the material silently.
+
+Also: link textures as **TIF** in the Shader Editor (Blender can't read DDS BC7);
+SEUT converts TIF→DDS on export. Then click **Create SEUT Material** to build the
+node tree (greyed out = not local yet).
+
 ## Emissive specifics
 
 - Material name must start with `Emissive` for SE to treat it as self-lit, and
