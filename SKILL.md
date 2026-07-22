@@ -56,6 +56,11 @@ Encyclopedic reference to *look things up*:
   more folding in from the wiki crawl). Sourced from the SE wiki Modding/Reference, 2026-07-22.
 - `reference/xml-and-scripting.md` — coding SBC XML properly + editing vanilla XML;
   PB scripts vs mod game-logic scripts, component skeletons, whitelist pitfalls.
+- `how-to/scripting/` — practical C# scripting section: `mod-script-setup.md` (where
+  scripts live, one-folder rule, Ingame alias), `game-logic-components.md` (component
+  lifecycle, worked from BlackHoleContainer), `the-whitelist.md` (blocked APIs incl.
+  Matrix.Decompose), `save-and-sync.md` (MP sync), `finding-things-in-the-world.md`,
+  and the mandatory `crash-safety-checklist.md`. Sourced from SE wiki Modding/Reference/Programming.
 - `reference/seut-reference.md` — SEUT install/requirements, panels, Shader Editor,
   export pipeline, error codes.
 - `reference/mod-structure.md` — mod folder layout, Workshop file access,

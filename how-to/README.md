@@ -49,4 +49,9 @@ Head to [reference/](../reference/) instead.
 
 ## Scripting (C#)
 
+- [scripting/mod-script-setup.md](scripting/mod-script-setup.md) — where scripts live (`\Data\Scripts\<ModName>\`), one-folder-per-assembly rule, `.cs`-only compile, MDK2, `Ingame` namespace alias gotcha, ModAPI doc sites. **Start here.**
+- [scripting/game-logic-components.md](scripting/game-logic-components.md) — `MyGameLogicComponent` lifecycle + `MySessionComponentBase`, `NeedsUpdate` flags, injected profiler; worked from the BlackHoleContainer script.
+- [scripting/the-whitelist.md](scripting/the-whitelist.md) — the modding whitelist, the MDK2 Roslyn analyzer, blocked APIs (incl. the `Matrix.Decompose` trap + fix), finding allowed alternatives.
+- [scripting/save-and-sync.md](scripting/save-and-sync.md) — persisting mod data + server-authoritative multiplayer sync.
+- [scripting/finding-things-in-the-world.md](scripting/finding-things-in-the-world.md) — querying entities in an area + reading decompiled game source.
 - [scripting/crash-safety-checklist.md](scripting/crash-safety-checklist.md) — **mandatory** crash-safety pre-flight before shipping any game-logic/session script (try/catch per-frame, first-frame guards, API verification, master switch, cull+client-only, validate+test).
