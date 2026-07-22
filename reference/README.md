@@ -27,6 +27,7 @@ you want the full detail.
 | Doc | What it covers |
 |---|---|
 | [conveyors-and-interactions](conveyors-and-interactions.md) | `detector_conveyor*` dummies, small vs large ports, interaction dummies. |
+| [conveyor-performance-and-logistics](conveyor-performance-and-logistics.md) | Why conveyor networks cause sim-speed lag, what a mod can/can't do about the sealed solver, and script logistics patterns (`CanTransferItemTo` + `TransferItemTo`). |
 
 **Tools & packaging**
 | Doc | What it covers |

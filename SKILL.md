@@ -45,6 +45,10 @@ Encyclopedic reference to *look things up*:
   Mountpoints), grid sizing, subparts, collision rules, export, pitfalls.
 - `reference/conveyors-and-interactions.md` — `detector_conveyor*` dummies, small
   vs large ports, in/out, interaction dummies, subparts, worked example.
+- `reference/conveyor-performance-and-logistics.md` — why conveyor networks lag
+  (graph size × re-solve frequency), the sealed engine solver, and script logistics
+  patterns: `CanTransferItemTo` (checks + runs the solver) vs `TransferItemTo`
+  (teleports, no solver), and the cached-connectivity teleport pattern.
 - `reference/xml-and-scripting.md` — coding SBC XML properly + editing vanilla XML;
   PB scripts vs mod game-logic scripts, component skeletons, whitelist pitfalls.
 - `reference/seut-reference.md` — SEUT install/requirements, panels, Shader Editor,
@@ -215,6 +219,16 @@ python3 scripts/sbc_tool.py new-material --name NAME [--tech DECAL_CUTOUT]
   ("Infinite") / ASCII in `AppendingCustomInfo`. ∞ works on LCD text panels (fuller font),
   just not the terminal DetailInfo box. The engine inventory `L` fill bar is **not moddable**
   — you can only add a line beside it. See `advanced/custom-terminal-detailinfo.md`.
+- **Conveyor lag is the engine's sealed pathfinder — you can't mod the solver.** Lag =
+  graph size × re-solve frequency. Advice "fewer inventories / fewer 6-way junctions" maps to:
+  fewer endpoints → fewer queries; smaller graph → each query cheaper. A mod CANNOT inject or
+  cache a route or throttle re-solves (`MyGridConveyorSystem` is sealed C++; BuildInfo only
+  copies its constants). A mod CAN: detect endpoints (`GetConveyorEndpointBlock`), check
+  reachability (`CanTransferItemTo` — but this RUNS the solver), and teleport items
+  (`TransferItemTo` — no solver). Best offload = **cache `CanTransferItemTo` rarely (startup +
+  block add/remove), teleport on a slow tick often**. A huge central container is real
+  consolidation ONLY when it replaces scattered storage. See
+  `reference/conveyor-performance-and-logistics.md`.
 - **SEUT is a Blender 4.x addon.** Blender 5.x breaks Icon Render (`scene.node_tree` removed
   → blank icon) and install (`PATH_SUPPORTS_BLEND_RELATIVE` enum). Use Blender 4.2 LTS / 4.3.
   After a failed install, **delete the whole `space-engineers-utilities` addon folder** before
