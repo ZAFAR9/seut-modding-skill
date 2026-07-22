@@ -181,27 +181,36 @@ public class MyLogic : MyGameLogicComponent
 - `how-to/troubleshooting/dead-ports-case-study.md` — debugging methodology
 
 
-## Whitelist gotchas — float vs double math types
+## Whitelist gotchas — decomposing a matrix (NEITHER Decompose is allowed)
 
-The mod whitelist is picky about which VRageMath overloads are allowed. A blocked
-API **stops compilation** with a message like *"'Matrix' does not contain a
-definition for 'Decompose'"* — even though the method exists. It's the whitelist
-hiding it, not a missing using/reference.
+The mod whitelist is picky about VRageMath. A blocked API **stops compilation**
+with *"'Matrix' does not contain a definition for 'Decompose'"* — even though the
+method exists. It's the whitelist hiding it, not a missing using/reference.
 
-**Known trap: `Matrix.Decompose` (float) is NOT whitelisted; `MatrixD.Decompose`
-(double) IS.** To split a local matrix into scale/rotation/translation, use the
-double-precision path and convert back if your fields are float:
+**Known trap: BOTH `Matrix.Decompose` (float) AND `MatrixD.Decompose` (double) are
+blocked.** Do not reach for the double variant here — it fails the same way. The
+robust fix is to **not decompose at all.**
+
+To animate a subpart (spin/rotate) while preserving its baked tilt, flatten-scale
+and position: **cache its original local matrix once, then pre-multiply a pure
+rotation each frame.** `Matrix.CreateRotationX/Y/Z` and matrix `*` ARE whitelisted:
 
 ```csharp
-MatrixD rest = subpart.PositionComp.LocalMatrixRef; // implicit Matrix->MatrixD
-Vector3D scaleD; QuaternionD rotD; Vector3D posD;
-if (!rest.Decompose(out scaleD, out rotD, out posD)) { /* degenerate: disable */ }
-Vector3    scale = (Vector3)scaleD;
-Quaternion rot   = new Quaternion((float)rotD.X,(float)rotD.Y,(float)rotD.Z,(float)rotD.W);
-Vector3    pos   = (Vector3)posD;
+// once:
+_diskRest = subpart.PositionComp.LocalMatrixRef;   // holds tilt+scale+pos
+if (!_diskRest.IsValid() || _diskRest.IsNan()) { /* disable safely */ }
+
+// each frame — spin in the subpart's OWN local space, keep everything else:
+Matrix spin = Matrix.CreateRotationY(angle);
+Matrix m = spin * _diskRest;                       // local-space pre-multiply
+subpart.PositionComp.SetLocalMatrix(ref m, null, true);
 ```
 
-Rule of thumb when a VRageMath method "doesn't exist": try the **`D` (double)
-variant** (`MatrixD`, `Vector3D`, `QuaternionD`) — it's usually the whitelisted
-one. Confirmed against the SE MatrixD API reference.
+Because `_diskRest` already carries the non-uniform scale and tilt, you never need
+to separate them out — pre-multiplying a rotation spins the part in its own plane
+and leaves scale/tilt/position intact. Confirmed against the SE Matrix API ref.
+
+General rule when a VRageMath method "doesn't exist" at compile: first try the
+`D`/double variant, but if that's *also* blocked (as with Decompose), redesign to
+avoid it — compose matrices from `Create*` builders + multiply instead.
 

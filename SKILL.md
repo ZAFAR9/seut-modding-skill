@@ -158,11 +158,13 @@ python3 scripts/sbc_tool.py new-material --name NAME [--tech DECAL_CUTOUT]
   **distance-cull + client-only** (`!IsDedicated`) any per-frame visual work; (6) `sbc_tool.py
   validate` before repackaging. Full checklist: `how-to/scripting/crash-safety-checklist.md`.
 
-- **VRageMath method "doesn't exist"? Try the `D` (double) variant — the float one
-  isn't whitelisted.** e.g. `Matrix.Decompose` fails to compile ("does not contain a
-  definition for 'Decompose'") but **`MatrixD.Decompose` works**. Same for many
-  `Vector3`/`Quaternion` ops — reach for `MatrixD`/`Vector3D`/`QuaternionD` and cast
-  back to float. See `how-to/scripting/crash-safety-checklist.md#whitelist-gotchas`.
+- **VRageMath method "doesn't exist"? It's the whitelist hiding it.** First try the
+  `D`/double variant (`MatrixD`/`Vector3D`/`QuaternionD`). But some methods are blocked
+  in BOTH — e.g. **`Matrix.Decompose` AND `MatrixD.Decompose` are both blocked.** For
+  those, redesign to avoid the call: to spin/rotate a subpart, cache its local matrix
+  once and pre-multiply a rotation each frame (`Matrix m = Matrix.CreateRotationY(a) *
+  restMatrix;`) — `Create*` builders + matrix multiply ARE whitelisted, and this keeps
+  the baked tilt/scale/pos. See `how-to/scripting/crash-safety-checklist.md`.
 
 - **Custom material exports PITCH BLACK? Textures weren't baked into the `.mwm`.** The
   material name is in the model but its CM/NG/ADD texture paths are **empty** (verify:
