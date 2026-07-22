@@ -24,6 +24,7 @@ Then use the rest as you hit specific needs.
 | [setup-seut](setup-seut.md) | You're setting up tools for the first time, or paths are broken. |
 | [create-custom-block](create-custom-block.md) | You want the full model → definition → validate → test loop. |
 | [create-custom-material](create-custom-material.md) | You need a custom texture/material (the 4 packed maps, glass, etc.). |
+| [create-animated-subpart](create-animated-subpart.md) | You want a **spinning/moving subpart** (accretion disk, dish, doors) — scene-based subpart setup + the *export each scene individually* trick. |
 | [fix-voxel-textures](fix-voxel-textures.md) | Textures render **magenta, black, or flat** and you need the cause + fix. |
 | [work-with-dds-textures](work-with-dds-textures.md) | You need to open, inspect, or combine `.dds` files (in GIMP). |
 | [blender-seut-concepts](blender-seut-concepts.md) | You want to **understand LODs, Build Stages, collision, mount points, bounding box, mirroring, icon render, import & export**. |

@@ -166,6 +166,23 @@ python3 scripts/sbc_tool.py new-material --name NAME [--tech DECAL_CUTOUT]
   restMatrix;`) — `Create*` builders + matrix multiply ARE whitelisted, and this keeps
   the baked tilt/scale/pos. See `how-to/scripting/crash-safety-checklist.md`.
 
+- **Animated subparts (spinning disk, dish, doors) are SCENE-based, and the export trick
+  is EXPORT EACH SCENE INDIVIDUALLY.** The subpart's real mesh lives in its own Scene
+  (Type=`Subpart`); the Main scene holds only an **empty** named `subpart_<Name>`,
+  parented to the body, in the Main collection, with its **Subpart Scene** dropdown
+  pointing at the subpart scene. Runtime key strips the prefix (`TryGetValue("<Name>")`).
+  ⭐ **"Export All" repeatedly failed to produce the linked `subpart_*.mwm`. The fix that
+  worked: switch to the Subpart scene → Export Current Scene, then switch to the Main
+  scene → Export Current Scene.** Verify with `strings -n 6 Main.mwm | grep -i subpart`
+  (must show the link) and confirm `subpart_<Name>.mwm` exists WITH the prefix. Traps we
+  hit, each with its own signature: **W005** = empty not parented to body; file exports as
+  `<Name>.mwm` with **no** `subpart_` prefix + no link in main = mesh left in the Main
+  scene / Subpart scene empty; **E002/E016** = Subpart scene's Main collection empty or
+  unticked; **"mesh keeps getting deleted on export"** = the disk existed only as the
+  preview instance SEUT injects into the Main scene (export removes that temp preview) —
+  the real geometry MUST live in the Subpart scene, never rely on the preview. Full guide:
+  `how-to/create-animated-subpart.md`.
+
 - **Custom material exports PITCH BLACK? Textures weren't baked into the `.mwm`.** The
   material name is in the model but its CM/NG/ADD texture paths are **empty** (verify:
   `strings -n 6 X.mwm | grep ColorMetalTexture` — your custom mat's `_cm.dds` line is absent).
