@@ -29,6 +29,19 @@ you want the full detail.
 | [conveyors-and-interactions](conveyors-and-interactions.md) | `detector_conveyor*` dummies, small vs large ports, interaction dummies. |
 | [conveyor-performance-and-logistics](conveyor-performance-and-logistics.md) | Why conveyor networks cause sim-speed lag, what a mod can/can't do about the sealed solver, and script logistics patterns (`CanTransferItemTo` + `TransferItemTo`). |
 
+**World, models & simulation**
+| Doc | What it covers |
+|---|---|
+| [models-and-modelxml](models-and-modelxml.md) | The `.mwm` model pipeline, LODs, dummy helper nodes, subparts, and the ModelXML sidecar format. |
+| [physics](physics.md) | Havok physics layers, collision shapes/filtering, mass, and the 32×32 collision matrix. |
+| [world-and-session-settings](world-and-session-settings.md) | How saves are structured (Checkpoint / WorldConfiguration) and the key moddable SessionSettings fields. |
+
+**SBC definitions** (definition types beyond CubeBlocks — see [sbc/](sbc/))
+| Doc | What it covers |
+|---|---|
+| [sbc/planetgenerator](sbc/planetgenerator.md) | Planet definition: heightmaps, ore mappings, biomes/ComplexMaterials, environment items, atmosphere. |
+| [sbc/spawngroup](sbc/spawngroup.md) | SpawnGroup definition: prefab spawns, frequencies, and placement rules for encounters/drones. |
+
 **Tools & packaging**
 | Doc | What it covers |
 |---|---|

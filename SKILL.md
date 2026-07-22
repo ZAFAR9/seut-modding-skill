@@ -49,6 +49,11 @@ Encyclopedic reference to *look things up*:
   (graph size × re-solve frequency), the sealed engine solver, and script logistics
   patterns: `CanTransferItemTo` (checks + runs the solver) vs `TransferItemTo`
   (teleports, no solver), and the cached-connectivity teleport pattern.
+- `reference/models-and-modelxml.md` — `.mwm` pipeline, LODs, dummies, subparts, ModelXML sidecar.
+- `reference/physics.md` — Havok collision layers/filtering, collision shapes, the 32×32 matrix.
+- `reference/world-and-session-settings.md` — Checkpoint/WorldConfiguration + moddable SessionSettings.
+- `reference/sbc/` — definition-type references beyond CubeBlocks (planetgenerator, spawngroup;
+  more folding in from the wiki crawl). Sourced from the SE wiki Modding/Reference, 2026-07-22.
 - `reference/xml-and-scripting.md` — coding SBC XML properly + editing vanilla XML;
   PB scripts vs mod game-logic scripts, component skeletons, whitelist pitfalls.
 - `reference/seut-reference.md` — SEUT install/requirements, panels, Shader Editor,
